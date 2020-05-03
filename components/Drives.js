@@ -243,7 +243,7 @@ export default class App extends React.Component {
         <View style={styles.container}>
           <ImageBackground source={require('../assets/login.png')} style={styles.image}>
             <View style={{ flex: 1, width: '90%', alignItems: 'center' }}>
-              <Image source={require('../assets/pastdrives.png')} style={{
+              <Image source={require('../assets/pastVol.png')} style={{
                 height: '100%',
                 width: '84%',
                 marginTop: '10%',
@@ -291,10 +291,10 @@ export default class App extends React.Component {
           />
           <ImageBackground source={require('../assets/login.png')} style={styles.image}>
             <View style={{ flex: 1, width: '90%', alignItems: 'center' }}>
-              <Image source={require('../assets/pastdrives.png')} style={{
-                height: '100%',
-                width: '100%',
-                marginTop: '10%',
+              <Image source={require('../assets/pastVol.png')} style={{
+                height: '75%',
+                width: '75%',
+                marginTop: '8%',
                 flex: 1,
               }} resizeMode="contain"></Image></View>
             <View style={{ width: '100%', flex: 6 }}>
