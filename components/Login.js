@@ -122,11 +122,6 @@ export default class Login extends React.Component {
           <ImageBackground source={require('../assets/login.png')} style={styles.image}>
 
             <Image source={require('../assets/vh.png')} style={styles.imagefront} resizeMode="contain"></Image>
-            <Image source={require('../assets/dtime.png')} style={{
-              height: '5%',
-              width: '74%',
-              flex: 1,
-            }} resizeMode="contain"></Image>
             <ImageBackground source={require('../assets/form.png')} style={{
               alignItems: 'center',
               flex: 4,
@@ -214,7 +209,7 @@ const styles = StyleSheet.create({
     paddingTop:'5%',
     height: '25%',
     width: '80%',
-    flex: 2,
+    flex: 3,
 
   },
   spinnerTextStyle: {
