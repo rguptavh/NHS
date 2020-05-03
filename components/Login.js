@@ -43,7 +43,8 @@ export default class Login extends React.Component {
             // console.log(response.toString());
             var total = parseFloat(ok.substring(5,ok.indexOf(",",5)));
             global.hours = Math.floor(total);
-            global.minutes = (total-global.hours)*60;
+            global.minutes = Math.round((total-global.hours)*60);
+            console.log(global.minutes)
             var data = JSON.parse(ok.substring(ok.indexOf(",",5)+1,ok.length))
             
             // console.log(JSON.stringify(data))
@@ -52,15 +53,15 @@ export default class Login extends React.Component {
             var log = [];
             for (var x=0; x<data.length;x++){
               if (data[x].type == "Log"){
-                data[x]["id"] = x;
+                data[x]["id"] = ""+x;
                 log.push(data[x]);
               }
               else if (data[x].type == "Ongoing"){
-                data[x]["id"] = x;
+                data[x]["id"] = ""+x;
                 ongoing.push(data[x]);
               }
               else if (data[x].type == "Specific"){
-                data[x]["id"] = x;
+                data[x]["id"] = ""+x;
                 specific.push(data[x]);
               }
             }
@@ -76,7 +77,7 @@ export default class Login extends React.Component {
                 result.push(item.date);
               }
             }
-            for (i = 0; i < log.length; i++) {
+            for (var i = 0; i < log.length; i++) {
               if (result.includes(log[i].date)) {
                 result.shift();
                 // console.log(result)

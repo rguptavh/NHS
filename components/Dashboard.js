@@ -16,10 +16,12 @@ const rem = entireScreenHeight / 380;
 const entireScreenWidth = Dimensions.get('window').width;
 const wid = entireScreenWidth / 380;
 let first = true;
+
 export default class Login extends React.Component {
   state = {
     spinner: false,
-    data: global.logs,
+    ongoing: global.ongoing,
+    specific: global.specific,
   };
   constructor() {
     super();
@@ -96,6 +98,16 @@ export default class Login extends React.Component {
 
     }
   }
+   validURL(str) {
+    var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
+      '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
+      '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
+      '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
+      '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
+      '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
+    return !!pattern.test(str);
+  }
+  
   static navigationOptions = { headerMode: 'none', gestureEnabled: false };
   _renderItem = ({ item }) => {
     const rightButtons = [
@@ -109,16 +121,39 @@ export default class Login extends React.Component {
         first = false;
       }
       return (
-        <Swipeable rightButtons={rightButtons} rightButtonWidth={entireScreenWidth / 5} bounceOnMount={f}>
+      
           <ListItem style={{ marginLeft: 0, backgroundColor: 'transparent' }}>
             <Body>
-              <Text style={{ flex: 1, fontFamily: 'WSB', color: 'white' }}>{item.hours} hours</Text>
-              <Text style={{ flex: 1, fontFamily: 'WSR', color: 'white' }}>Event Name: {item.name}</Text>
+            <Text style={{ flex: 1, fontFamily: 'WSB', color: 'white' }}>{item.name}</Text>
+                <Text style={{ flex: 1, fontFamily: 'WSR', color: 'white' }}>{item.address}</Text>
+                <Text style={{ flex: 1, fontFamily: 'WSR', color: 'white' }}>{item.contact}</Text>
             </Body>
           </ListItem>
-        </Swipeable >
       );
     };
+    _renderItem2 = ({ item }) => {
+      const rightButtons = [
+        <TouchableHighlight style={{ backgroundColor: 'blue', height: '100%', justifyContent: 'center', }} onPress={() => this.edit(item)}><Text style={{ color: 'white', paddingLeft: entireScreenHeight / 30 }}>Edit</Text></TouchableHighlight>,
+        <TouchableHighlight style={{ backgroundColor: 'red', height: '100%', justifyContent: 'center', }} onPress={() => this.deleteNote(item)}><Text style={{ color: 'white', paddingLeft: entireScreenHeight / 50 }}>Delete</Text></TouchableHighlight>,
+      ];
+  
+        var f = false
+        if (first) {
+          f = true;
+          first = false;
+        }
+        return (
+      
+            <ListItem style={{ marginLeft: 0, backgroundColor: 'transparent' }}>
+              <Body>
+              <Text style={{ flex: 1, fontFamily: 'WSB', color: 'white' }}>{item.name}</Text>
+                <Text style={{ flex: 1, fontFamily: 'WSR', color: 'white' }}>{item.address}</Text>
+                <Text style={{ flex: 1, fontFamily: 'WSR', color: 'white' }}>{item.contact}</Text>
+                <Text style={{ flex: 1, fontFamily: 'WSR', color: 'white' }}>{item.start} to {item.end} on {item.date}</Text>
+              </Body>
+            </ListItem>
+        );
+      };
   render() {
 
     var ree;
@@ -133,50 +168,6 @@ export default class Login extends React.Component {
       ree = 1.75 * wid;
     }
 
-    if (global.logs.length == 0) {
-      return (
-
-        <View style={styles.container}>
-          <ImageBackground source={require('../assets/login.png')} style={styles.image}>
-            <View style={{ flex: 1, width: '90%', alignItems: 'center' }}>
-              <Image source={require('../assets/pastdrives.png')} style={{
-                height: '100%',
-                width: '84%',
-                marginTop: '10%',
-                flex: 1,
-              }} resizeMode="contain"></Image>
-            </View>
-            <View style={{ width: '100%', flex: 6, justifyContent: 'center', alignItems: 'center' }}>
-              <Text style={{ fontSize: 25 * wid, color: 'white', fontFamily: 'WSB' }}>Please create your first log!</Text>
-            </View>
-            <View style={{
-              width: '73%',
-              flex: 1,
-              justifyContent: 'center'
-            }}>
-              <TouchableOpacity
-                style={{
-                  height: entireScreenWidth * 0.73 * 276 / 1096,
-                  width: '100%',
-                }}
-                onPress={onPress}
-                disabled={this.state.loading}
-
-              >
-                <Image source={require('../assets/backbut.png')} style={{
-                  height: '100%',
-                  width: '100%',
-                  flex: 1
-
-
-                }} resizeMode="contain"></Image>
-              </TouchableOpacity>
-            </View>
-          </ImageBackground>
-        </View>
-      );
-    }
-    else {
       return (
 
         <View style={styles.container}>
@@ -194,13 +185,32 @@ export default class Login extends React.Component {
                 flex: 1,
               }} resizeMode="contain"></Image></View>
             <View style={{ width: '100%', flex: 6 }}>
+              <View style = {{width:'100%', flex:1,alignItems:'center',justifyContent:'center'}}>
+              <Text style={{ fontSize: Math.min(25 * wid, 16 * rem), fontFamily: 'WSR', color: 'white' }}>Ongoing Opportunities</Text>
+              </View>
+              <View style = {{width:'100%', flex:4}}>
+              
               <FlatList style={{ width: '100%' }}
-                data={this.state.data}
+                data={this.state.ongoing}
                 renderItem={this._renderItem}
                 keyExtractor={item => item.id}
                 scrollEnabled={!this.state.isSwiping}
               // stickyHeaderIndices={this.state.stickyHeaderIndices}
               />
+              </View>
+              <View style = {{width:'100%', flex:1,alignItems:'center',justifyContent:'center'}}>
+              <Text style={{ fontSize: Math.min(25 * wid, 16 * rem), fontFamily: 'WSR', color: 'white' }}>Specific Opportunities</Text>
+              </View>
+              <View style = {{width:'100%', flex:4}}>
+              
+              <FlatList style={{ width: '100%' }}
+                data={this.state.specific}
+                renderItem={this._renderItem2}
+                keyExtractor={item => item.id}
+                scrollEnabled={!this.state.isSwiping}
+              // stickyHeaderIndices={this.state.stickyHeaderIndices}
+              />
+              </View>
             </View>
             <View style={{
               width: '73%',
@@ -234,7 +244,6 @@ export default class Login extends React.Component {
       );
     }
   }
-}
 
 const styles = StyleSheet.create({
   container: {
