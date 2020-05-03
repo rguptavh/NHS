@@ -43,52 +43,66 @@ export default class Login extends React.Component {
             // console.log(response.toString());
             var total = ok.substring(5,ok.indexOf(",",5));
             var data = JSON.parse(ok.substring(ok.indexOf(",",5)+1,ok.length))
-            console.log(data)
-            console.log(total)
-            // console.log(JSON.stringify(data))
-            var data = [];
-            var response = [];
             
-            data = data.sort((a, b) => moment(b.date + " " + b.time, 'MM-DD-YYYY h:mm A').format('X') - moment(a.date + " " + a.time, 'MM-DD-YYYY h:mm A').format('X'))
+            // console.log(JSON.stringify(data))
+            var ongoing = [];
+            var specific = [];
+            var log = [];
+            for (var x=0; x<data.length;x++){
+              if (data[x].type == "Log"){
+                data[x]["id"] = x;
+                log.push(data[x]);
+              }
+              else if (data[x].type == "Ongoing"){
+                data[x]["id"] = x;
+                ongoing.push(data[x]);
+              }
+              else if (data[x].type == "Specific"){
+                data[x]["id"] = x;
+                specific.push(data[x]);
+              }
+            }
+            console.log(data)
+            
+            specific = specific.sort((a, b) => moment(a.date + " " + a.start, 'MM-DD-YYYY h:mm A').format('X') - moment(b.date + " " + b.start, 'MM-DD-YYYY h:mm A').format('X'))
+            log = log.sort((a, b) => moment(b.date, 'MM-DD-YYYY').format('X') - moment(a.date, 'MM-DD-YYYY').format('X'))
             const map = new Map();
             let result = [];
-            for (const item of data) {
+            for (const item of log) {
               if (!map.has(item.date)) {
                 map.set(item.date, true);    // set any value to Map
                 result.push(item.date);
               }
             }
-            const length = data.length;
-            const length2 = result.length;
-            for (i = 0; i < data.length; i++) {
-              if (result.includes(data[i].date)) {
+            for (i = 0; i < log.length; i++) {
+              if (result.includes(log[i].date)) {
                 result.shift();
                 // console.log(result)
                 const he = {
                   header: true,
-                  description: 'HEADER',
-                  tod: 'HEADER',
-                  time: 'HEADER',
-                  minutes: 'HEADER',
-                  road: 'HEADER',
-                  weather: 'HEADER',
-                  id: "" + (length + (length2 - result.length)),
-                  date: data[i].date
+                  id: "" + (data.length+i),
+                  date: log[i].date
                 }
-                data.splice(i, 0, he);
+                log.splice(i, 0, he);
               }
             }
-            data.unshift({
-              description: "EXPORT",
-              tod: "EXPORT",
-              date: "EXPORT",
-              time: "EXPORT",
-              minutes: "EXPORT",
-              road: "EXPORT",
-              weather: "EXPORT",
-              id: "" + (data.length+1),
-              header: true
-            });
+            var all = [];
+            const he = {
+              header: true,
+              id: "" + (data.length+i),
+              title: "Specific Events"
+            }
+            all.push(he);
+            all = all.concat(specific);
+            const he2 = {
+              header: true,
+              id: "" + (data.length+i),
+              title: "Ongoing Events"
+            }
+            all.push(he);
+            all = all.concat(ongoing);
+            console.log(log)
+            console.log(all)
             global.drives = data;
             // console.log(JSON.stringify(data))
             this.setState({ loading: false });
