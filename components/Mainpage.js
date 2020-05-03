@@ -85,7 +85,7 @@ export default class Mainpage extends React.Component {
   render() {
 
     const Handbook = () => {
-      WebBrowser.openBrowserAsync('https://www.cyberdriveillinois.com/publications/pdf_publications/dsd_a112.pdf');
+      WebBrowser.openBrowserAsync('https://www.d128.org/vhhs/students/student-activities/nhs/index');
     }
     return (
       <View style={styles.container}>
@@ -97,7 +97,7 @@ export default class Mainpage extends React.Component {
                   <Text style={{ marginTop: entireScreenHeight * 0.96 * 16 / 63 * 0.08, alignItems: 'center', textAlign: 'center', }} numberOfLines={1}>
                     <Text style={{ fontSize: Math.min(70 * wid, 35 * rem), fontFamily: 'WSR', color: 'white' }} >{global.hours}</Text>
                     <Text style={{ fontSize: Math.min(30 * wid, 20 * rem), fontFamily: 'WSR', color: 'white' }}>{global.hours == 1 ? "hour" : "hours"}</Text>
-                    <Text style={{ fontSize: Math.min(70 * wid, 35 * rem), fontFamily: 'WSR', color: 'white' }}>{global.minutes}</Text>
+                    <Text style={{ fontSize: Math.min(70 * wid, 35 * rem), fontFamily: 'WSR', color: 'white' }}>{global.minutes==''?'0' : global.minutes}</Text>
                     <Text style={{ fontSize: Math.min(30 * wid, 20 * rem), fontFamily: 'WSR', color: 'white' }}>{global.minutes == 1 ? "minute" : "minutes"}</Text>
                   </Text>
                 </View>
