@@ -121,7 +121,9 @@ export default class Login extends React.Component {
           />
           <ImageBackground source={require('../assets/login.png')} style={styles.image}>
 
+          <View style = {{flex:3, width: '100%', alignItems:'center'}}>
             <Image source={require('../assets/vh.png')} style={styles.imagefront} resizeMode="contain"></Image>
+            </View>
             <ImageBackground source={require('../assets/form.png')} style={{
               alignItems: 'center',
               flex: 4,
@@ -205,7 +207,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   imagefront: {
-    marginTop: '9%',
+    marginTop: '12%',
     paddingTop:'5%',
     height: '25%',
     width: '80%',
