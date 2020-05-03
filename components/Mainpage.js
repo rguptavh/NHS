@@ -97,7 +97,7 @@ export default class Mainpage extends React.Component {
                   <Text style={{ marginTop: entireScreenHeight * 0.96 * 16 / 63 * 0.08, alignItems: 'center', textAlign: 'center', }} numberOfLines={1}>
                     <Text style={{ fontSize: Math.min(70 * wid, 32 * rem), fontFamily: 'WSR', color: 'white' }} >{global.hours}</Text>
                     <Text style={{ fontSize: Math.min(25 * wid, 16 * rem), fontFamily: 'WSR', color: 'white' }}>{global.hours == 1 ? "hour " : "hours "}</Text>
-                    <Text style={{ fontSize: Math.min(70 * wid, 32 * rem), fontFamily: 'WSR', color: 'white' }}>{global.minutes==''?'10' : global.minutes}</Text>
+                    <Text style={{ fontSize: Math.min(70 * wid, 32 * rem), fontFamily: 'WSR', color: 'white' }}>{global.minutes==''?'0' : global.minutes}</Text>
                     <Text style={{ fontSize: Math.min(25 * wid, 16 * rem), fontFamily: 'WSR', color: 'white' }}>{global.minutes == 1 ? "minute" : "minutes"}</Text>
                   </Text>
                 </View>
