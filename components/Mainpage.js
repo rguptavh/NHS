@@ -2,6 +2,8 @@ import * as React from 'react';
 import { Text, View, StyleSheet, Image, ImageBackground, TouchableOpacity, Dimensions, AsyncStorage } from 'react-native';
 import * as WebBrowser from 'expo-web-browser';
 import { activateKeepAwake, deactivateKeepAwake } from 'expo-keep-awake';
+import * as Progress from 'react-native-progress';
+
 
 const entireScreenHeight = Dimensions.get('window').height;
 const rem = entireScreenHeight / 380;
@@ -14,12 +16,9 @@ export default class Mainpage extends React.Component {
     // Ignore dynamic type scaling on iOS
     Text.defaultProps.allowFontScaling = false; 
     this.state = {
-      timer: null,
-      minutes_Counter: '00',
-      seconds_Counter: '00',
-      hours_Counter: '00',
       startDisable: false,
-      loading: global.logging
+      loading: global.logging,
+      progress1: 0,
     }
   }
 
@@ -32,16 +31,22 @@ export default class Mainpage extends React.Component {
     try {
      // AsyncStorage.removeItem('username');  // Clear username for testing
       // console.log(this.state.loading)
-      if (global.drives == null) {
+      if (global.logs == null) {
         let times = setInterval(() => {
          // // console.log(global.logging)
-          if (global.drives != null) {
+          if (global.logs != null) {
             this.setState({ loading: false });
+            this.setState({ progress1: (global.hours * 60 + global.minutes) / 2400 });
             clearInterval(this.state.times);
           }
 
         }, 100);
         this.setState({ times });
+      }
+      else {
+        setTimeout(() => {
+          this.setState({ progress1: (global.hours * 60 + global.minutes) / 3000 });
+        }, 500);
       }
       return true;
     }
@@ -75,53 +80,6 @@ export default class Mainpage extends React.Component {
   }
 
 
-  onButtonStart = () => {
-    if (!(this.state.startDisable)) {
-      activateKeepAwake();
-      let timer = setInterval(() => {
-
-        var num = (Number(this.state.seconds_Counter) + 1).toString(),
-          count = this.state.minutes_Counter,
-          coot = this.state.hours_Counter;
-
-        if (Number(this.state.seconds_Counter) == 59) {
-          count = (Number(this.state.minutes_Counter) + 1).toString();
-          num = '00';
-        }
-        if (Number(this.state.minutes_Counter) == 59 && Number(this.state.seconds_Counter) == 59) {
-          coot = (Number(this.state.hours_Counter) + 1).toString();
-          count = '00';
-        }
-
-        this.setState({
-          minutes_Counter: count.length == 1 ? '0' + count : count,
-          seconds_Counter: num.length == 1 ? '0' + num : num,
-          hours_Counter: coot.length == 1 ? '0' + coot : coot
-        });
-      }, 1000);
-      this.setState({ timer });
-
-      this.setState({ startDisable: true })
-    }
-
-    else {
-      deactivateKeepAwake();
-      clearInterval(this.state.timer);
-      global.minutes = String(parseInt(this.state.hours_Counter) * 60 + parseInt(this.state.minutes_Counter) + Math.round(parseInt(this.state.seconds_Counter) / 30));
-      // console.log(global.minutes);
-      this.props.navigation.navigate('Logdrive')
-
-      this.setState({ startDisable: false })
-      this.setState({
-        timer: null,
-        minutes_Counter: '00',
-        seconds_Counter: '00',
-        hours_Counter: '00'
-      });
-
-    }
-
-  }
   static navigationOptions = { headerMode: 'none', gestureEnabled: false };
 
   render() {
@@ -132,34 +90,22 @@ export default class Mainpage extends React.Component {
     return (
       <View style={styles.container}>
         <ImageBackground source={require('../assets/login.png')} style={styles.image}>
-          <View style={{
-            width: '85%',
-            flex: 2,
-            justifyContent: 'center',
-
-          }}>
-
-            <TouchableOpacity
-              onPress={this.onButtonStart}
-              activeOpacity={0.6}
-              style={{
-                height: entireScreenWidth * 0.85 * 616 / 1416,
-                width: '100%', justifyContent: 'center'
-              }}
-            >
-              <ImageBackground source={require('../assets/timer.png')} style={{
-                height: '100%',
-                width: '100%',
-                flex: 1,
-                justifyContent: 'center',
-                alignContent: 'center'
-
-
-              }} resizeMode="contain">
-                <Text style={styles.counterText}>{this.state.hours_Counter}:{this.state.minutes_Counter}:{this.state.seconds_Counter}</Text>
-
-              </ImageBackground>
-            </TouchableOpacity>
+        <View style={{ flex: 2, width: '100%', alignItems: 'center', marginTop: entireScreenHeight * 0.05, justifyContent: 'center', }}>
+            <View style={styles.topcard}>
+              <TouchableOpacity style={{ flex: 1, width: '100%', alignItems: 'center' }}>
+                <View style={{ flex: 1, justifyContent: 'center', flexDirection: 'row', width: '90%', alignItems: 'flex-end' }}>
+                  <Text style={{ marginTop: entireScreenHeight * 0.96 * 16 / 63 * 0.08, alignItems: 'center', textAlign: 'center', }} numberOfLines={1}>
+                    <Text style={{ fontSize: Math.min(70 * wid, 35 * rem), fontFamily: 'WSR', color: 'white' }} >{global.hours}</Text>
+                    <Text style={{ fontSize: Math.min(30 * wid, 20 * rem), fontFamily: 'WSR', color: 'white' }}>{global.hours == 1 ? "hour" : "hours"}</Text>
+                    <Text style={{ fontSize: Math.min(70 * wid, 35 * rem), fontFamily: 'WSR', color: 'white' }}>{global.minutes}</Text>
+                    <Text style={{ fontSize: Math.min(30 * wid, 20 * rem), fontFamily: 'WSR', color: 'white' }}>{global.minutes == 1 ? "minute" : "minutes"}</Text>
+                  </Text>
+                </View>
+                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
+                  <Progress.Bar progress={this.state.progress1} width={entireScreenWidth * 0.8} animated={true} height={rem * 20} borderRadius={25} color='#79AEFD' borderColor='#D0D0D0' unfilledColor='white' />
+                </View>
+              </TouchableOpacity>
+            </View>
           </View>
           <View style={{
             width: '100%',
@@ -269,5 +215,17 @@ const styles = StyleSheet.create({
     fontSize: entireScreenWidth * 60 / 380, textAlign: 'center',
     color: 'white',
     fontFamily: 'Nova',
-  }
+  },
+  topcard: {
+    height: '80%', width: '90%', backgroundColor: '#C2CBE1', borderRadius: 25, shadowColor: "#000",
+    alignItems: 'center',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.30,
+    shadowRadius: 4.65,
+
+    elevation: 8,
+  },
 });

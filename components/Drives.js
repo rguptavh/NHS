@@ -1,9 +1,8 @@
 import React from "react";
 import { FlatList, TouchableOpacity, ImageBackground, StyleSheet, Dimensions, View, Image, Alert, TouchableHighlight, Linking } from "react-native";
-import { Text, ListItem, Left, Body, Icon, Right, Title } from "native-base";
+import { Text, ListItem, Body} from "native-base";
 import moment from 'moment';
 import Swipeable from 'react-native-swipeable-row';
-import * as WebBrowser from 'expo-web-browser';
 import Spinner from 'react-native-loading-spinner-overlay';
 
 
@@ -12,7 +11,6 @@ const rem = entireScreenHeight / 380;
 const entireScreenWidth = Dimensions.get('window').width;
 const wid = entireScreenWidth / 380;
 let first = true;
-let first2 = true;
 
 export default class App extends React.Component {
   constructor() {
@@ -21,7 +19,7 @@ export default class App extends React.Component {
     // Ignore dynamic type scaling on iOS
     Text.defaultProps.allowFontScaling = false;
     this.state = {
-      data: global.drives,
+      data: global.logs,
       spinner: false
     };
   }
@@ -44,7 +42,7 @@ export default class App extends React.Component {
   edit(item) {
 
     var temp = this.state.data;
-    global.drives = temp;
+    global.logs = temp;
     this.setState({ data: temp });
     global.olddate = String(item.date);
     global.oldtime = String(item.time);
@@ -90,7 +88,7 @@ export default class App extends React.Component {
                 break;
               }
             }
-            global.drives = temp;
+            global.logs = temp;
             this.setState({ data: temp });
             var date = String(item.date);
             var time = String(item.time);
@@ -210,9 +208,8 @@ export default class App extends React.Component {
         <Swipeable rightButtons={rightButtons} rightButtonWidth={entireScreenWidth / 5} bounceOnMount={f}>
           <ListItem style={{ marginLeft: 0, backgroundColor: 'transparent' }}>
             <Body>
-              <Text style={{ flex: 1, fontFamily: 'WSB', color: 'white' }}>{item.minutes} minutes</Text>
-              <Text style={{ flex: 1, fontFamily: 'WSR', color: 'white' }}>{item.description}</Text>
-              <Text style={{ flex: 1, fontFamily: 'WSR', color: 'white' }}>{item.tod} - {item.road} - {item.weather} - {item.time}</Text>
+              <Text style={{ flex: 1, fontFamily: 'WSB', color: 'white' }}>{item.hours} hours</Text>
+              <Text style={{ flex: 1, fontFamily: 'WSR', color: 'white' }}>Event Name: {item.name}</Text>
             </Body>
           </ListItem>
         </Swipeable >
@@ -221,14 +218,14 @@ export default class App extends React.Component {
   };
   static navigationOptions = { headerMode: 'none', gestureEnabled: false };
   render() {
-    //// console.log(global.drives)
+    //// console.log(global.logs)
     const onPress = () => {
       this.props.navigation.navigate('Main')
     }
     
 
     
-  //  // console.log(JSON.stringify(global.drives))
+  //  // console.log(JSON.stringify(global.logs))
     const entireScreenHeight = Dimensions.get('window').height;
     const rem = entireScreenHeight / 380;
     const entireScreenWidth = Dimensions.get('window').width;
@@ -240,7 +237,7 @@ export default class App extends React.Component {
     else {
       ree = 1.75 * wid;
     }
-    if (global.drives.length == 1) {
+    if (global.logs.length == 0) {
       return (
 
         <View style={styles.container}>
@@ -254,7 +251,7 @@ export default class App extends React.Component {
               }} resizeMode="contain"></Image>
             </View>
             <View style={{ width: '100%', flex: 6, justifyContent: 'center', alignItems: 'center' }}>
-              <Text style={{ fontSize: 25 * wid, color: 'white', fontFamily: 'WSB' }}>Please log your first drive!</Text>
+              <Text style={{ fontSize: 25 * wid, color: 'white', fontFamily: 'WSB' }}>Please create your first log!</Text>
             </View>
             <View style={{
               width: '73%',

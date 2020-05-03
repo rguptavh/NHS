@@ -2,10 +2,10 @@ import React from 'react';
 import { Text, View, Button, Vibration, Platform, StyleSheet,AsyncStorage, BackHandler, } from 'react-native';
 import { Notifications } from 'expo';
 import * as Permissions from 'expo-permissions';
+import * as Font from 'expo-font';
 import Constants from 'expo-constants';
 import { createStackNavigator } from 'react-navigation-stack'
 import { createAppContainer } from 'react-navigation';
-//import * as Font from 'expo-font';
 import log from './components/Login';
 import mainscr from './components/Mainpage';
 import drives from './components/Drives';
@@ -66,6 +66,11 @@ export default class AppContainer extends React.Component {
     // this function will fire on the next tick after the app starts
     // with the notification data.
     this._notificationSubscription = Notifications.addListener(this._handleNotification);
+    await Font.loadAsync({
+      'Nova': require('./assets/fonts/NovaMono.ttf'),
+      'WSR': require('./assets/fonts/WorkSans-Regular.ttf'),
+      'WSB': require('./assets/fonts/WorkSans-SemiBold.ttf'),
+    });
   }
 
   _handleNotification = notification => {

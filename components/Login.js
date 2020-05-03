@@ -41,7 +41,9 @@ export default class Login extends React.Component {
           
           if (ok.substring(0,4) == "true"){
             // console.log(response.toString());
-            var total = ok.substring(5,ok.indexOf(",",5));
+            var total = parseFloat(ok.substring(5,ok.indexOf(",",5)));
+            global.hours = Math.floor(total);
+            global.minutes = (total-global.hours)*60;
             var data = JSON.parse(ok.substring(ok.indexOf(",",5)+1,ok.length))
             
             // console.log(JSON.stringify(data))
@@ -86,27 +88,13 @@ export default class Login extends React.Component {
                 log.splice(i, 0, he);
               }
             }
-            var all = [];
-            const he = {
-              header: true,
-              id: "" + (data.length+i),
-              title: "Specific Events"
-            }
-            all.push(he);
-            all = all.concat(specific);
-            const he2 = {
-              header: true,
-              id: "" + (data.length+i),
-              title: "Ongoing Events"
-            }
-            all.push(he);
-            all = all.concat(ongoing);
-            console.log(log)
-            console.log(all)
-            global.drives = data;
+
+            global.ongoing = ongoing;
+            global.specific = specific;
+            global.logs = log;
             // console.log(JSON.stringify(data))
             this.setState({ loading: false });
-         //    this.props.navigation.replace('Main')
+            this.props.navigation.replace('Main')
 
           }
           else if (ok.substring(0,5) == "false") {
