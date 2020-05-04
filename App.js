@@ -20,7 +20,7 @@ export default class AppContainer extends React.Component {
   state = {
     expoPushToken: '',
     notification: {},
-    assetsLoaded: true,
+    assetsLoaded: false,
   };
   constructor() {
     super();
@@ -71,6 +71,7 @@ export default class AppContainer extends React.Component {
       'WSR': require('./assets/fonts/WorkSans-Regular.ttf'),
       'WSB': require('./assets/fonts/WorkSans-SemiBold.ttf'),
     });
+    this.setState({assetsLoaded: true});
   }
 
   _handleNotification = notification => {
