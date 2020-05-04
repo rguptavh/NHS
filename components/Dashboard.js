@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, StyleSheet, Image, ImageBackground, TouchableOpacity, Alert, Dimensions, AsyncStorage, FlatList, TouchableHighlight } from 'react-native';
+import { View, StyleSheet, Image, ImageBackground, TouchableOpacity, Alert, Dimensions, AsyncStorage, FlatList, TouchableHighlight, Linking } from 'react-native';
 import moment from 'moment';
 import { Text, ListItem,Body} from "native-base";
 
@@ -107,6 +107,15 @@ export default class Login extends React.Component {
       '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
     return !!pattern.test(str);
   }
+
+  open(item){
+    if(this.validURL(item.description)){
+      Linking.openURL(item.description);
+    }
+    else{
+      alert(item.description);
+    }
+  }
   
   static navigationOptions = { headerMode: 'none', gestureEnabled: false };
   _renderItem = ({ item }) => {
@@ -118,7 +127,7 @@ export default class Login extends React.Component {
       }
       return (
       
-          <ListItem style={{ marginLeft: 0, backgroundColor: 'transparent' }}>
+          <ListItem style={{ marginLeft: 0, backgroundColor: 'transparent' }} onPress = {this.open(item)}>
             <Body>
             <Text style={{ flex: 1, fontFamily: 'WSB', color: 'white' }}>{item.name}</Text>
                 <Text style={{ flex: 1, fontFamily: 'WSR', color: 'white' }}>{item.address}</Text>
