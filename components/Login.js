@@ -41,6 +41,7 @@ export default class Login extends React.Component {
           
           if (ok.substring(0,4) == "true"){
             // console.log(response.toString());
+            global.uname = uname;
             var total = parseFloat(ok.substring(5,ok.indexOf(",",5)));
             global.hours = Math.floor(total);
             global.minutes = Math.round((total-global.hours)*60);
