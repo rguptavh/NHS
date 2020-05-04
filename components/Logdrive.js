@@ -70,7 +70,7 @@ export default class Login extends React.Component {
           this.setState({ loading: true });
           const Http = new XMLHttpRequest();
           const url = 'https://script.google.com/macros/s/AKfycbxMNgxSn85f9bfVMc5Ow0sG1s0tBf4d2HwAKzASfCSuu9mePQYm/exec';
-          var data = "?username=" + global.uname + "&date=" + date + "&minutes=" + minutes + "&event=" + event +  "&descriptiont=" + description + "&action=addhours";
+          var data = "?username=" + global.uname + "&date=" + date + "&minutes=" + minutes + "&event=" + event +  "&description=" + description + "&action=addhours";
           console.log(data);
           Http.open("GET", String(url + data));
           Http.send();
