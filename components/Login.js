@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, StyleSheet, Text, TouchableWithoutFeedback, Keyboard, TextInput, Image, ImageBackground, TouchableOpacity, Alert, Dimensions, AsyncStorage, KeyboardAvoidingView } from 'react-native';
+import { AppState,View, StyleSheet, Text, TouchableWithoutFeedback, Keyboard, TextInput, Image, ImageBackground, TouchableOpacity, Alert, Dimensions, AsyncStorage, KeyboardAvoidingView } from 'react-native';
 import moment from 'moment';
 import Spinner from 'react-native-loading-spinner-overlay';
 
@@ -8,9 +8,25 @@ export default class Login extends React.Component {
   state = {
     username: '',
     password: '',
-    loading: false
+    loading: false,
+    background: false
   };
+  componentDidMount() {
+    AppState.addEventListener('change', this._handleAppStateChange);
+  }
 
+  componentWillUnmount() {
+    AppState.removeEventListener('change', this._handleAppStateChange);
+  }
+
+  _handleAppStateChange = (nextAppState) => {
+    if (nextAppState === 'active') {
+      setTimeout(() => { this.setState({background: false}); }, 500);
+    }
+    else if (nextAppState == 'background') {
+      this.setState({background: true});
+    }
+  }
   static navigationOptions = { headerMode: 'none', gestureEnabled: false };
   render() {
     const entireScreenHeight = Dimensions.get('window').height;
@@ -90,7 +106,7 @@ export default class Login extends React.Component {
                 log.splice(i, 0, he);
               }
             }
-            options = []
+            var options = []
             for (const item of ongoing) {
               options.push({ label: item.name, value: item.name })
             }
@@ -121,7 +137,7 @@ export default class Login extends React.Component {
     }
     return (
       <KeyboardAvoidingView behavior={Platform.OS == "ios" ? "padding" : "height"}
-      style={styles.container}>
+      style={styles.container} enabled={!this.state.background}>
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()} accessible={false}>
 
         <View style={styles.container}>
@@ -167,8 +183,8 @@ export default class Login extends React.Component {
                     textAlign={'center'}
                     autoCapitalize='none'
                     autoCompleteType='off'
-                    onChangeText={(value) => this.setState({ password: value })}
-                    value={this.state.password}
+                    onChangeText={(value) => this.setState({ username: value })}
+                    value={this.state.username}
 
                   /></View>
                   <View style = {{width:'100%',flex:0.4}}></View>
@@ -187,8 +203,8 @@ export default class Login extends React.Component {
                     textAlign={'center'}
                     autoCapitalize='none'
                     autoCompleteType='off'
-                    onChangeText={(value) => this.setState({ username: value })}
-                    value={this.state.username}
+                    onChangeText={(value) => this.setState({ password: value })}
+                    value={this.state.password}
                     secureTextEntry={true}
 
                   /></View>

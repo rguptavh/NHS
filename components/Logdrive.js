@@ -104,6 +104,10 @@ export default class Login extends React.Component {
                 temp += minutes / 60;
                 global.hours = Math.floor(parseFloat(temp));
                 global.minutes = Math.round((parseFloat(temp) - global.hours) * 60);
+                var temp = global.logs
+                temp.push({date: date, hours:""+(minutes/60).toFixed(2),name:event,type:'Log'})
+                temp = temp.sort((a, b) => moment(b.date, 'MM-DD-YYYY').format('X') - moment(a.date, 'MM-DD-YYYY').format('X'))
+                global.logs = temp;
                 console.log(global.hours);
                 console.log(global.minutes);
                 /*var data = [];
