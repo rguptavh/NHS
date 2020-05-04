@@ -9,24 +9,7 @@ export default class Login extends React.Component {
     username: '',
     password: '',
     loading: false,
-    background: false
   };
-  componentDidMount() {
-    AppState.addEventListener('change', this._handleAppStateChange);
-  }
-
-  componentWillUnmount() {
-    AppState.removeEventListener('change', this._handleAppStateChange);
-  }
-
-  _handleAppStateChange = (nextAppState) => {
-    if (nextAppState === 'active') {
-      setTimeout(() => { this.setState({background: false}); }, 500);
-    }
-    else if (nextAppState == 'background') {
-      this.setState({background: true});
-    }
-  }
   static navigationOptions = { headerMode: 'none', gestureEnabled: false };
   render() {
     const entireScreenHeight = Dimensions.get('window').height;
@@ -137,7 +120,7 @@ export default class Login extends React.Component {
     }
     return (
       <KeyboardAvoidingView behavior={Platform.OS == "ios" ? "padding" : "height"}
-      style={styles.container} enabled={!this.state.background}>
+      style={styles.container}>
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()} accessible={false}>
 
         <View style={styles.container}>
