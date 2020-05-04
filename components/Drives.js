@@ -205,7 +205,6 @@ export default class App extends React.Component {
         first = false;
       }
       return (
-        <Swipeable rightButtons={rightButtons} rightButtonWidth={entireScreenWidth / 5} bounceOnMount={f}>
           <ListItem style={{ marginLeft: 0, backgroundColor: 'transparent' }}>
             <Body>
             <Text style={{ flex: 1, fontFamily: 'WSB', color: 'white' }}>Event Name: {item.name}</Text>
@@ -214,7 +213,6 @@ export default class App extends React.Component {
               
             </Body>
           </ListItem>
-        </Swipeable >
       );
     }
   };
