@@ -110,10 +110,6 @@ export default class Login extends React.Component {
   
   static navigationOptions = { headerMode: 'none', gestureEnabled: false };
   _renderItem = ({ item }) => {
-    const rightButtons = [
-      <TouchableHighlight style={{ backgroundColor: 'blue', height: '100%', justifyContent: 'center', }} onPress={() => this.edit(item)}><Text style={{ color: 'white', paddingLeft: entireScreenHeight / 30 }}>Edit</Text></TouchableHighlight>,
-      <TouchableHighlight style={{ backgroundColor: 'red', height: '100%', justifyContent: 'center', }} onPress={() => this.deleteNote(item)}><Text style={{ color: 'white', paddingLeft: entireScreenHeight / 50 }}>Delete</Text></TouchableHighlight>,
-    ];
 
       var f = false
       if (first) {
@@ -132,10 +128,7 @@ export default class Login extends React.Component {
       );
     };
     _renderItem2 = ({ item }) => {
-      const rightButtons = [
-        <TouchableHighlight style={{ backgroundColor: 'blue', height: '100%', justifyContent: 'center', }} onPress={() => this.edit(item)}><Text style={{ color: 'white', paddingLeft: entireScreenHeight / 30 }}>Edit</Text></TouchableHighlight>,
-        <TouchableHighlight style={{ backgroundColor: 'red', height: '100%', justifyContent: 'center', }} onPress={() => this.deleteNote(item)}><Text style={{ color: 'white', paddingLeft: entireScreenHeight / 50 }}>Delete</Text></TouchableHighlight>,
-      ];
+
   
         var f = false
         if (first) {
@@ -186,7 +179,7 @@ export default class Login extends React.Component {
               }} resizeMode="contain"></Image></View>
             <View style={{ width: '100%', flex: 6 }}>
               <View style = {{width:'100%', flex:1,alignItems:'center',justifyContent:'center'}}>
-              <Text style={{ fontSize: Math.min(25 * wid, 16 * rem), fontFamily: 'WSR', color: 'white' }}>Ongoing Opportunities</Text>
+              <Text style={{ fontSize: Math.min(25 * wid, 16 * rem), fontFamily: 'WSBB', color: 'white' }}>Ongoing Opportunities</Text>
               </View>
               <View style = {{width:'100%', flex:4}}>
               
@@ -199,7 +192,7 @@ export default class Login extends React.Component {
               />
               </View>
               <View style = {{width:'100%', flex:1,alignItems:'center',justifyContent:'center'}}>
-              <Text style={{ fontSize: Math.min(25 * wid, 16 * rem), fontFamily: 'WSR', color: 'white' }}>Specific Opportunities</Text>
+              <Text style={{ fontSize: Math.min(25 * wid, 16 * rem), fontFamily: 'WSBB', color: 'white' }}>Specific Opportunities</Text>
               </View>
               <View style = {{width:'100%', flex:4}}>
               
