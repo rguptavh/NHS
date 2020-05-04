@@ -37,11 +37,12 @@ export default class AppContainer extends React.Component {
       const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
       let finalStatus = existingStatus;
       if (existingStatus !== 'granted') {
+        alert('This app uses notifications');
         const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
         finalStatus = status;
+        console.log(status)
       }
       if (finalStatus !== 'granted') {
-        alert('Failed to get push token for push notification!');
         return;
       }
       token = await Notifications.getExpoPushTokenAsync();

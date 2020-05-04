@@ -208,8 +208,10 @@ export default class App extends React.Component {
         <Swipeable rightButtons={rightButtons} rightButtonWidth={entireScreenWidth / 5} bounceOnMount={f}>
           <ListItem style={{ marginLeft: 0, backgroundColor: 'transparent' }}>
             <Body>
-              <Text style={{ flex: 1, fontFamily: 'WSB', color: 'white' }}>{item.hours} hours</Text>
-              <Text style={{ flex: 1, fontFamily: 'WSR', color: 'white' }}>Event Name: {item.name}</Text>
+            <Text style={{ flex: 1, fontFamily: 'WSB', color: 'white' }}>Event Name: {item.name}</Text>
+              <Text style={{ flex: 1, fontFamily: 'WSR', color: 'white' }}>{item.hours} {item.hours == 1 ? "hour" : "hours"}</Text>
+              <Text style={{ flex: 1, fontFamily: 'WSR', color: 'white' }}>{item.description}</Text>
+              
             </Body>
           </ListItem>
         </Swipeable >

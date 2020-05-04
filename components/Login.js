@@ -10,6 +10,13 @@ export default class Login extends React.Component {
     password: '',
     loading: false,
   };
+  constructor() {
+    super();
+    Text.defaultProps = Text.defaultProps || {};
+    // Ignore dynamic type scaling on iOS
+    Text.defaultProps.allowFontScaling = false;
+
+  }
   static navigationOptions = { headerMode: 'none', gestureEnabled: false };
   render() {
     const entireScreenHeight = Dimensions.get('window').height;
