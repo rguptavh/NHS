@@ -2,7 +2,7 @@ import * as React from 'react';
 import { View, StyleSheet, Image, ImageBackground, TouchableOpacity, Alert, Dimensions, AsyncStorage, FlatList, TouchableHighlight, Linking } from 'react-native';
 import moment from 'moment';
 import { Text, ListItem,Body} from "native-base";
-
+import * as WebBrowser from 'expo-web-browser';
 import { NavigationActions, StackActions } from 'react-navigation'
 import Swipeable from 'react-native-swipeable-row';
 import Spinner from 'react-native-loading-spinner-overlay';
@@ -110,7 +110,8 @@ export default class Login extends React.Component {
 
   open(item){
     if(this.validURL(item.description)){
-      Linking.openURL(item.description);
+      console.log("press")
+      WebBrowser.openBrowserAsync(item.description);
     }
     else{
       alert(item.description);
@@ -127,12 +128,14 @@ export default class Login extends React.Component {
       }
       return (
       
-          <ListItem style={{ marginLeft: 0, backgroundColor: 'transparent' }} onPress = {this.open(item)}>
+          <ListItem style={{ marginLeft: 0, backgroundColor: 'transparent' }} >
+            <TouchableOpacity onPress={() => this.open(item)}>
             <Body>
             <Text style={{ flex: 1, fontFamily: 'WSB', color: 'white' }}>{item.name}</Text>
                 <Text style={{ flex: 1, fontFamily: 'WSR', color: 'white' }}>{item.address}</Text>
                 <Text style={{ flex: 1, fontFamily: 'WSR', color: 'white' }}>{item.contact}</Text>
             </Body>
+            </TouchableOpacity>
           </ListItem>
       );
     };
@@ -196,7 +199,6 @@ export default class Login extends React.Component {
                 data={this.state.ongoing}
                 renderItem={this._renderItem}
                 keyExtractor={item => item.id}
-                scrollEnabled={!this.state.isSwiping}
               // stickyHeaderIndices={this.state.stickyHeaderIndices}
               />
               </View>
@@ -209,7 +211,6 @@ export default class Login extends React.Component {
                 data={this.state.specific}
                 renderItem={this._renderItem2}
                 keyExtractor={item => item.id}
-                scrollEnabled={!this.state.isSwiping}
               // stickyHeaderIndices={this.state.stickyHeaderIndices}
               />
               </View>
