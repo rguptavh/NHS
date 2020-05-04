@@ -216,7 +216,7 @@ export default class App extends React.Component {
       );
     }
   };
-  static navigationOptions = { headerMode: 'none', gestureEnabled: false };
+  static navigationOptions = { headerMode: 'none', gestureEnabled: false, };
   render() {
     //// console.log(global.logs)
     const onPress = () => {
