@@ -95,9 +95,9 @@ export default class Mainpage extends React.Component {
               <TouchableOpacity style={{ flex: 1, width: '100%', alignItems: 'center' }}>
                 <View style={{ flex: 1, justifyContent: 'center', flexDirection: 'row', width: '90%', alignItems: 'flex-end' }}>
                   <Text style={{ marginTop: entireScreenHeight * 0.96 * 16 / 63 * 0.08, alignItems: 'center', textAlign: 'center', }} numberOfLines={1}>
-                    <Text style={{ fontSize: Math.min(70 * wid, 32 * rem), fontFamily: 'WSR', color: 'white' }} >{global.hours}</Text>
+                    <Text style={{ fontSize: Math.min((70-10*(Math.floor(Math.log10(global.minutes <= 0 ? 1 : global.minutes)) + Math.floor(Math.log10(global.hours <= 0 ? 1 : global.hours)))) * wid, 32 * rem), fontFamily: 'WSR', color: 'white' }} >{global.hours}</Text>
                     <Text style={{ fontSize: Math.min(25 * wid, 16 * rem), fontFamily: 'WSR', color: 'white' }}>{global.hours == 1 ? "hour " : "hours "}</Text>
-                    <Text style={{ fontSize: Math.min(70 * wid, 32 * rem), fontFamily: 'WSR', color: 'white' }}>{global.minutes==''?'0' : global.minutes}</Text>
+                    <Text style={{ fontSize: Math.min((70-10*(Math.floor(Math.log10(global.minutes <= 0 ? 1 : global.minutes)) + Math.floor(Math.log10(global.hours <= 0 ? 1 : global.hours)))) * wid, 32 * rem), fontFamily: 'WSR', color: 'white' }}>{global.minutes==''?'0' : global.minutes}</Text>
                     <Text style={{ fontSize: Math.min(25 * wid, 16 * rem), fontFamily: 'WSR', color: 'white' }}>{global.minutes == 1 ? "minute" : "minutes"}</Text>
                   </Text>
                 </View>
