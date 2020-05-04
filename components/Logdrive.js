@@ -251,14 +251,7 @@ export default class Login extends React.Component {
                   useNativeAndroidPickerStyle={false}
                   placeholder={placeholder}
                   onValueChange={(value) => this.setState({ event: value })}
-                  items={[
-                    { label: 'Papi', value: 'Local' },
-                    { label: 'Papi', value: 'Highway' },
-                    { label: 'PApi', value: 'PApi' },
-                    { label: 'Papi', value: 'Papi' },
-                    { label: 'Papi', value: 'Papi' },
-                    { label: 'papi', value: 'Parking Lot' },
-                  ]}
+                  items={global.options}
 
                 />
               </View>

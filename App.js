@@ -67,6 +67,7 @@ export default class AppContainer extends React.Component {
     // with the notification data.
     this._notificationSubscription = Notifications.addListener(this._handleNotification);
     await Font.loadAsync({
+      'Noto': require('./assets/fonts/NotoSans-SemiBold.ttf'),
       'WSR': require('./assets/fonts/WorkSans-Regular.ttf'),
       'WSB': require('./assets/fonts/WorkSans-SemiBold.ttf'),
     });
