@@ -161,7 +161,7 @@ export default class Login extends React.Component {
               </Body>
               </TouchableOpacity>
               {item.signed == 'true' ? <Icon name='ios-checkmark' style = {{marginLeft:'1%', color:'green'}}></Icon> : null}
-              <Badge style = {{alignSelf:'center', marginLeft: item.signed == 'true'? '2%':'6%'}}><Text>{item.slots}</Text></Badge>
+              <Badge style = {{alignSelf:'center', marginLeft: item.signed == 'true'? '2%':'6%', backgroundColor: parseInt(item.slots)> 10 ? 'green' : 'red'}} ><Text>{item.slots}</Text></Badge>
             </ListItem>
         );
       };
