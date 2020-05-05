@@ -57,7 +57,7 @@ export default class Login extends React.Component {
         alert("Please log in again");
       }
 
-      else if (date != '' && event != '' && !isNaN(minutes)) {
+      else if (date != '' && event != '' && event != 'Select an event...' && !isNaN(minutes)) {
 
         if (minutes == '0') {
           alert("Can't log 0 minutes")
@@ -89,18 +89,18 @@ export default class Login extends React.Component {
                 global.logs = temp;
                 console.log(global.hours);
                 console.log(global.minutes);
-                alert("Success!");
-                this.props.navigation.replace('Main')
+                this.setState({ loading: false });
+                setTimeout(() => { alert("Success!"); this.props.navigation.replace('Main');}, 100);
+                
 
-              }
-              else if (ok == "false") {
-                alert("Failed login");
               }
               else {
                 console.log(ok);
-                alert("Server error");
+                this.setState({ loading: false });
+                setTimeout(() => { alert("Server error");}, 100);
+                
               }
-              this.setState({ loading: false });
+              
             }
           }
         }

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, Vibration, Platform, StyleSheet,AsyncStorage, Image, } from 'react-native';
+import { Text, View, Vibration, Platform, StyleSheet,AsyncStorage, Image, Alert } from 'react-native';
 import { Notifications } from 'expo';
 import * as Permissions from 'expo-permissions';
 import * as Font from 'expo-font';
@@ -11,15 +11,17 @@ import mainscr from './components/Mainpage';
 import drives from './components/Drives';
 import logdrive from './components/Logdrive';
 import dashboard from './components/Dashboard';
-import { AppLoading } from 'expo';
 import { SplashScreen } from 'expo';
+import { Asset } from 'expo-asset';
+import moment from 'moment';
+
 
 
 //import moment from 'moment';
+global.token = "None"
 let logged = false;
 export default class AppContainer extends React.Component {
   state = {
-    expoPushToken: '',
     notification: {},
     assetsLoaded: false,
     isAppReady: false,
@@ -37,17 +39,22 @@ export default class AppContainer extends React.Component {
       const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
       let finalStatus = existingStatus;
       if (existingStatus !== 'granted') {
-        alert('This app uses notifications');
+        asked = await AsyncStorage.getItem('asked')
+        console.log(asked)
+        if (asked == null || asked == 'undefined') {
+          AsyncStorage.setItem('asked', "true");
+          Alert.alert('Please Enable Notifications','This app uses notifications to notify you when events are added and when an event has limited slots are left.');
+        }
+
         const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+
         finalStatus = status;
         console.log(status)
       }
       if (finalStatus !== 'granted') {
         return;
       }
-      token = await Notifications.getExpoPushTokenAsync();
-      console.log(token);
-      this.setState({ expoPushToken: token });
+      global.token = await Notifications.getExpoPushTokenAsync();
     } else {
       alert('Must use physical device for Push Notifications');
     }
@@ -77,7 +84,9 @@ export default class AppContainer extends React.Component {
       'WSB': require('./assets/fonts/WorkSans-SemiBold.ttf'),
       'WSBB': require('./assets/fonts/WorkSans-Black.ttf'),
     });
-    this.setState({assetsLoaded: true});
+    this.cacheResourcesAsync() // ask for resources
+    .then(() => this.setState({assetsLoaded: true})) // mark resources as loaded
+
     global.logging = false;
     let name;
     try {
@@ -97,8 +106,9 @@ export default class AppContainer extends React.Component {
       this.setState({ assetsLoaded: true });
       var uname = name;
       const Http = new XMLHttpRequest();
-      const url = 'https://script.google.com/macros/s/AKfycbz21dke8ZWXExmF9VTkN0_3ITaceg-3Yg-i17lO31wtCC_0n00/exec';
-      var data = "?username=" + uname + "&action=getdrives";
+      const url = 'https://script.google.com/macros/s/AKfycbxMNgxSn85f9bfVMc5Ow0sG1s0tBf4d2HwAKzASfCSuu9mePQYm/exec';
+      var data = "?username=" + uname + "&token=" + String(global.token) +"&action=getlogs";
+      console.log(data)
       Http.open("GET", String(url + data));
       Http.send();
       var ok;
@@ -171,10 +181,12 @@ export default class AppContainer extends React.Component {
             global.logs = log;
             // console.log(JSON.stringify(data))
             this.setState({ isAppReady: true });
-            this.props.navigation.replace('Main')
 
           }
           else {
+            console.log(ok)
+            global.hours = 0;
+            global.minutes = 0;
             this.setState({ isAppReady: true });
             setTimeout(() => { alert("Server Error"); }, 100);
           }
@@ -183,6 +195,9 @@ export default class AppContainer extends React.Component {
       }
     }
     else {
+      global.hours = 0;
+      global.minutes = 0;
+      SplashScreen.hide();
       this.setState({ isAppReady: true });
     }
  
@@ -195,11 +210,25 @@ export default class AppContainer extends React.Component {
 
   // Can use this function below, OR use Expo's Push Notification Tool-> https://expo.io/dashboard/notifications
   render() {
-    if (!this.state.isAppReady || !this.state.assetsLoaded) {
-      return (
-        <AppLoading></AppLoading>
+    if (!this.state.assetsLoaded) {
+      return null;
+  }
+    if (!this.state.isAppReady) {
+        return (
+          <View style={{ flex: 1 }}>
+          <Image
+            style={{ flex: 1, resizeMode: 'cover', width: undefined, height: undefined }}
+            source={require('./assets/splash.gif')}
+            onLoadEnd={() => {
+              console.log('Image#onLoadEnd: hiding SplashScreen');
+              SplashScreen.hide(); // Image is fully presented, instruct SplashScreen to hide
+            }}
+            fadeDuration={0}
+          />
+        </View>
       );
-    }
+        }
+
       const AppNavigator = createStackNavigator({
         Login: {
           screen: log
@@ -224,6 +253,11 @@ export default class AppContainer extends React.Component {
 
       const AppContainer = createAppContainer(AppNavigator);
       return <AppContainer />;
+  }
+  async cacheResourcesAsync() {
+    const images = [require('./assets/splash.png')];
+    const cacheImages = images.map(image => Asset.fromModule(image).downloadAsync());
+    return Promise.all(cacheImages);
   }
 }
 

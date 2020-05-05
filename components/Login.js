@@ -33,6 +33,7 @@ export default class Login extends React.Component {
     const onPress = () => {
       var uname = this.state.username;
       var pword = this.state.password;
+      if (uname != "" && pword != ""){
       this.setState({ loading: true });
       const Http = new XMLHttpRequest();
       const url = 'https://script.google.com/macros/s/AKfycbxMNgxSn85f9bfVMc5Ow0sG1s0tBf4d2HwAKzASfCSuu9mePQYm/exec';
@@ -108,6 +109,7 @@ export default class Login extends React.Component {
             global.specific = specific;
             global.logs = log;
             // console.log(JSON.stringify(data))
+            AsyncStorage.setItem('username', this.state.username);
             this.setState({ loading: false });
             this.props.navigation.replace('Main')
 
@@ -125,6 +127,10 @@ export default class Login extends React.Component {
         }
       }
     }
+    else{
+      alert("Please fill all fields")
+    }
+  }
     return (
       <KeyboardAvoidingView behavior={Platform.OS == "ios" ? "padding" : "height"}
       style={styles.container}>
