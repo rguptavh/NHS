@@ -22,7 +22,9 @@ export default class Mainpage extends React.Component {
     }
   }
 
-
+  componentDidMount() {
+    setTimeout(() => { this.setState({ progress1: (global.hours * 60 + global.minutes) / 2400 }); }, 100);
+  }
 
 
   logDrive = () => {
@@ -42,30 +44,30 @@ export default class Mainpage extends React.Component {
   static navigationOptions = { headerMode: 'none', gestureEnabled: false };
 
   render() {
-    const onPress2 = async () => {
-      Alert.alert(
-        "Log Out",
-        "Are you sure you want to log out?",
-        [
-          {
-            text: "No"
-          },
-          {
-            text: "Yes", onPress: async () => {
-              await AsyncStorage.removeItem('username');
-              const resetAction = StackActions.reset({
-                index: 0,
-                actions: [NavigationActions.navigate({routeName: 'Login'})],
-                key: null,
-              });
-              this.props.navigation.dispatch(resetAction);
-            }
-          }
-        ],
-        { cancelable: false }
-      );
-    
-    }
+const onPress2 = async () => {
+  Alert.alert(
+    "Log Out",
+    "Are you sure you want to log out?",
+    [
+      {
+        text: "No"
+      },
+      {
+        text: "Yes", onPress: async () => {
+          await AsyncStorage.removeItem('username');
+          const resetAction = StackActions.reset({
+            index: 0,
+            actions: [NavigationActions.navigate({routeName: 'Login'})],
+            key: null,
+          });
+          this.props.navigation.dispatch(resetAction);
+        }
+      }
+    ],
+    { cancelable: false }
+  );
+
+}
     const Handbook = () => {
       WebBrowser.openBrowserAsync('https://www.d128.org/vhhs/students/student-activities/nhs/index');
     }
