@@ -76,6 +76,7 @@ export default class Login extends React.Component {
                       for (var x=0, l = temp.length; x<l;x++){
                         if (item.name == temp[x].name){
                           temp[x]["signed"] = "true";
+                          temp[x]["slots"] = ""+parseInt(temp[x].slots)-1
                           break;
                         }
                       }
@@ -126,7 +127,7 @@ export default class Login extends React.Component {
       
           <ListItem style={{ marginLeft: 0, backgroundColor: 'transparent' }} iconRight iconStyle={{ color: "green" , marginLeft:'5%'}} >
 
-            <TouchableOpacity onPress={() => this.open(item)} style = {{width:'90%'}}>
+            <TouchableOpacity onPress={() => this.open(item)} style = {{width:'85%'}}>
 
             <Body>
 
@@ -150,7 +151,7 @@ export default class Login extends React.Component {
         return (
       
             <ListItem style={{ marginLeft: 0, backgroundColor: 'transparent' }}>
-            <TouchableOpacity onPress={() => this.open(item)} style = {{width:'90%'}}>
+            <TouchableOpacity onPress={() => this.open(item)} style = {{width:'85%'}}>
 
               <Body>
               <Text style={{ flex: 1, fontFamily: 'WSB', color: 'white' }}>{item.name}</Text>
@@ -159,7 +160,8 @@ export default class Login extends React.Component {
                 <Text style={{ flex: 1, fontFamily: 'WSR', color: 'white' }}>{item.start} to {item.end} on {item.date}</Text>
               </Body>
               </TouchableOpacity>
-              {item.signed == 'true' ? <Icon name='ios-checkmark' style = {{marginLeft:'5%', color:'green'}}></Icon> : null}
+              {item.signed == 'true' ? <Icon name='ios-checkmark' style = {{marginLeft:'1%', color:'green'}}></Icon> : null}
+              <Badge style = {{alignSelf:'center', marginLeft: item.signed == 'true'? '2%':'6%'}}><Text>{item.slots}</Text></Badge>
             </ListItem>
         );
       };
@@ -186,13 +188,7 @@ export default class Login extends React.Component {
             textStyle={styles.spinnerTextStyle}
           />
           <ImageBackground source={require('../assets/login.png')} style={styles.image}>
-            <View style={{ flex: 1, width: '90%', alignItems: 'center' }}>
-              <Image source={require('../assets/pastdrives.png')} style={{
-                height: '100%',
-                width: '100%',
-                marginTop: '10%',
-                flex: 1,
-              }} resizeMode="contain"></Image></View>
+            <View style={{ flex: 0.4, width: '90%', alignItems: 'center' }}></View>
             <View style={{ width: '100%', flex: 6 }}>
               <View style = {{width:'100%', flex:1,alignItems:'center',justifyContent:'center'}}>
               <Text style={{ fontSize: Math.min(25 * wid, 16 * rem), fontFamily: 'WSBB', color: 'white' }}>Ongoing Opportunities</Text>
