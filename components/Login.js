@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { AppState,View, StyleSheet, Text, TouchableWithoutFeedback, Keyboard, TextInput, Image, ImageBackground, TouchableOpacity, Alert, Dimensions, AsyncStorage, KeyboardAvoidingView } from 'react-native';
+import { View, StyleSheet, Text, TouchableWithoutFeedback, Keyboard, TextInput, Image, ImageBackground, TouchableOpacity, Dimensions, AsyncStorage, KeyboardAvoidingView } from 'react-native';
 import moment from 'moment';
 import Spinner from 'react-native-loading-spinner-overlay';
 
@@ -23,13 +23,7 @@ export default class Login extends React.Component {
     const rem = entireScreenHeight / 380;
     const entireScreenWidth = Dimensions.get('window').width;
     const wid = entireScreenWidth / 380;
-    var ree;
-    if (entireScreenWidth >= 0.92 * entireScreenHeight * 4 / 9 * 1524 / 1200) {
-      ree = rem;
-    }
-    else {
-      ree = 1.75 * wid;
-    }
+
     const onPress = () => {
       var uname = this.state.username;
       var pword = this.state.password;

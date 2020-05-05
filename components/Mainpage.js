@@ -23,7 +23,7 @@ export default class Mainpage extends React.Component {
   }
 
   componentDidMount() {
-    setTimeout(() => { this.setState({ progress1: (global.hours * 60 + global.minutes) / 2400 }); }, 100);
+    this.setState({ progress1: (global.hours * 60 + global.minutes) / 1200 });
   }
 
 
@@ -116,7 +116,6 @@ const onPress2 = async () => {
                 height: entireScreenWidth / 2 * 0.9,
                 flex: 1
               }} onPress={this.pastDrives}
-
             >
               <Image source={require('../assets/pdrive.png')} style={{
                 height: '100%',
