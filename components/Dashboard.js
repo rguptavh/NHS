@@ -3,8 +3,6 @@ import { View, StyleSheet, Image, ImageBackground, TouchableOpacity, Alert, Dime
 import moment from 'moment';
 import { Text, ListItem,Body} from "native-base";
 import * as WebBrowser from 'expo-web-browser';
-import { NavigationActions, StackActions } from 'react-navigation'
-import Swipeable from 'react-native-swipeable-row';
 import Spinner from 'react-native-loading-spinner-overlay';
 
 
@@ -29,75 +27,7 @@ export default class Login extends React.Component {
     // Ignore dynamic type scaling on iOS
     Text.defaultProps.allowFontScaling = false;
   }
-  componentDidMount() {
 
-    try {
-      //AsyncStorage.removeItem('username');  // Clear username for testing
-
-
-      if (global.drives == null) {
-        let times = setInterval(() => {
-          // // console.log(global.logging)
-          if (global.drives != null) {
-            this.checkdate();
-            setTimeout(() => {
-              this.setState({ progress1: (global.totalhrs * 60 + global.totalmins) / 2400 });
-              this.setState({ progress2: (global.nighthrs * 60 + global.nightmins) / 600 });
-            }, 500);
-
-            clearInterval(this.state.times);
-          }
-
-        }, 100);
-        this.setState({ times });
-      }
-      else {
-        this.checkdate();
-        setTimeout(() => {
-          this.setState({ progress1: (global.totalhrs * 60 + global.totalmins) / 3000 });
-          this.setState({ progress2: (global.nighthrs * 60 + global.nightmins) / 600 });
-        }, 500);
-      }
-      return true;
-    }
-    catch (exception) {
-      return false;
-    }
-  }
-  async checkdate() {
-    dat = await AsyncStorage.getItem('date')
-    var d1 = moment(dat, 'MM-DD-YYYY')
-    var d2 = moment();
-    var total = global.totalhrs * 60 + global.totalmins;
-    var night = global.nighthrs * 60 + global.nightmins;
-    var day = total - night;
-    if (dat != null && d1.isSameOrAfter(d2, 'day')) {
-      // // console.log(dat);
-      this.setState({ date: dat });
-      var a = moment();
-      var b = moment(dat, 'MM-DD-YYYY')
-      if (night > 600 && day > 2400) {
-        this.setState({ hoursneeded: 'Done!' })
-      }
-      else {
-        const hrs = b.diff(a, 'days') + 1
-        if (hrs < 7) {
-          var needed = (600 - Math.min(night, 600) + 2400 - Math.min(day, 2400)) / 60;
-          needed = Math.round((needed + Number.EPSILON) * 100) / 100
-          this.setState({ hoursneeded: String(needed) })
-        }
-
-        else {
-          //   // console.log(hrs)
-          const weeks = Math.round(hrs / 7)
-          var needed = (600 - Math.min(night, 600) + 2400 - Math.min(day, 2400)) / weeks / 60;
-          needed = Math.round((needed + Number.EPSILON) * 100) / 100
-          this.setState({ hoursneeded: String(needed) })
-        }
-      }
-
-    }
-  }
    validURL(str) {
     var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
       '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
@@ -117,7 +47,7 @@ export default class Login extends React.Component {
       if(item.type=='Specific'){
         Alert.alert(
           "Sign-Up",
-          "Description: "+item.description+"\nAre you sure you want to sign-up for "+item.name+"?",
+          "Description: "+item.description+"\nAre you sure you want to sign-up for "+item.name+"?\nNOTE: You will have to email a NHS sponsor to cancel your sign-up",
           [
             {
               text: "No"
@@ -126,7 +56,7 @@ export default class Login extends React.Component {
               text: "Yes", onPress: () => {
  
 
-    
+                this.setState({spinner: true})
                 const Http = new XMLHttpRequest();
                 const url = 'https://script.google.com/macros/s/AKfycbxMNgxSn85f9bfVMc5Ow0sG1s0tBf4d2HwAKzASfCSuu9mePQYm/exec';
                 var data = "?username=" + global.uname + "&event="+item.name+"&action=signup";
@@ -139,13 +69,20 @@ export default class Login extends React.Component {
                   console.log(ok);
                   if (Http.readyState == 4) {
                     if (String(ok) == "true") {
-                      alert("You have been signed up for "+item.name);
+                      this.setState({spinner: false})
+                      setTimeout(() => { alert("You have been signed up for "+item.name);}, 100);
                     }
                     else if(String(ok) == "false"){
-                      alert("You are already signed up for "+item.name);
+                      this.setState({spinner: false})
+                      setTimeout(() => {  alert("You are already signed up for "+item.name);}, 100);
+                    }
+                    else if(String(ok) == "nospots"){
+                      this.setState({spinner: false})
+                      setTimeout(() => {  alert("Sorry, all the spots for " + item.name + " are taken");}, 100);
                     }
                     else{
-                      alert("Failed to sign-up on server. Please try again.");
+                      this.setState({spinner: false})
+                      setTimeout(() => {  alert("Failed to sign-up on server. Please try again.");}, 100);
                     }
                   }
                 }
@@ -162,7 +99,7 @@ export default class Login extends React.Component {
 
       
       else{
-        alert(item.type);
+        alert(item.description);
 
       }
     }
@@ -232,7 +169,7 @@ export default class Login extends React.Component {
         <View style={styles.container}>
           <Spinner
             visible={this.state.spinner}
-            textContent={'Creating Your Driving Log...'}
+            textContent={'Sigining Up...'}
             textStyle={styles.spinnerTextStyle}
           />
           <ImageBackground source={require('../assets/login.png')} style={styles.image}>
@@ -247,26 +184,26 @@ export default class Login extends React.Component {
               <View style = {{width:'100%', flex:1,alignItems:'center',justifyContent:'center'}}>
               <Text style={{ fontSize: Math.min(25 * wid, 16 * rem), fontFamily: 'WSBB', color: 'white' }}>Ongoing Opportunities</Text>
               </View>
-              <View style = {{width:'100%', flex:4}}>
+              <View style = {{width:'100%', flex:4, justifyContent: this.state.ongoing.length ==0 ? 'center' : 'flex-start'}}>
               
-              <FlatList style={{ width: '100%' }}
+              {this.state.ongoing.length == 0 ? <Text style={{ fontSize: 30 * wid, color: 'white', fontFamily: 'WSB', alignSelf:'center', }}>No Ongoing Events</Text> :<FlatList style={{ width: '100%' }}
                 data={this.state.ongoing}
                 renderItem={this._renderItem}
                 keyExtractor={item => item.id}
               // stickyHeaderIndices={this.state.stickyHeaderIndices}
-              />
+              />}
               </View>
               <View style = {{width:'100%', flex:1,alignItems:'center',justifyContent:'center'}}>
               <Text style={{ fontSize: Math.min(25 * wid, 16 * rem), fontFamily: 'WSBB', color: 'white' }}>Specific Opportunities</Text>
               </View>
-              <View style = {{width:'100%', flex:4}}>
+              <View style = {{width:'100%', flex:4, justifyContent: this.state.specific.length ==0 ? 'center' : 'flex-start'}}>
               
-              <FlatList style={{ width: '100%' }}
+              {this.state.specific.length == 0 ? <Text style={{ fontSize: 30 * wid, color: 'white', fontFamily: 'WSB', alignSelf:'center', }}>No Specific Events</Text> : <FlatList style={{ width: '100%' }}
                 data={this.state.specific}
                 renderItem={this._renderItem2}
                 keyExtractor={item => item.id}
               // stickyHeaderIndices={this.state.stickyHeaderIndices}
-              />
+              />}
               </View>
             </View>
             <View style={{
@@ -354,6 +291,10 @@ const styles = StyleSheet.create({
     shadowRadius: 4.65,
 
     elevation: 8,
-  }
+  },
+  spinnerTextStyle: {
+    color: '#FFF',
+    top: 60
+  },
 
 });

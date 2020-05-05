@@ -108,6 +108,7 @@ export default class Login extends React.Component {
             global.specific = specific;
             global.logs = log;
             // console.log(JSON.stringify(data))
+            AsyncStorage.setItem('username', this.state.username);
             this.setState({ loading: false });
             this.props.navigation.replace('Main')
 
