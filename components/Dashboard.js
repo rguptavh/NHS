@@ -45,6 +45,7 @@ export default class Login extends React.Component {
     }
     else{
       if(item.type=='Specific'){
+
         Alert.alert(
           "Sign-Up",
           "Description: "+item.description+"\nAre you sure you want to sign-up for "+item.name+"?\nNOTE: You will have to email a NHS sponsor to cancel your sign-up",
@@ -87,10 +88,14 @@ export default class Login extends React.Component {
                   }
                 }
               }
-            }
-          ],
-          { cancelable: false }
-        );
+            ],
+            { cancelable: false }
+          );
+        }
+        else{
+          alert("You are already signed up for "+item.name+"!");
+        }
+
 
 
 
