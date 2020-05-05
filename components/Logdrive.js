@@ -89,18 +89,18 @@ export default class Login extends React.Component {
                 global.logs = temp;
                 console.log(global.hours);
                 console.log(global.minutes);
-                alert("Success!");
-                this.props.navigation.replace('Main')
+                this.setState({ loading: false });
+                setTimeout(() => { alert("Success!"); this.props.navigation.replace('Main');}, 100);
+                
 
-              }
-              else if (ok == "false") {
-                alert("Failed login");
               }
               else {
                 console.log(ok);
-                alert("Server error");
+                this.setState({ loading: false });
+                setTimeout(() => { alert("Server error");}, 100);
+                
               }
-              this.setState({ loading: false });
+              
             }
           }
         }
