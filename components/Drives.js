@@ -42,10 +42,6 @@ export default class App extends React.Component {
 
 
   _renderItem = ({ item }) => {
-    const rightButtons = [
-      <TouchableHighlight style={{ backgroundColor: 'blue', height: '100%', justifyContent: 'center', }} onPress={() => this.edit(item)}><Text style={{ color: 'white', paddingLeft: entireScreenHeight / 30 }}>Edit</Text></TouchableHighlight>,
-      <TouchableHighlight style={{ backgroundColor: 'red', height: '100%', justifyContent: 'center', }} onPress={() => this.deleteNote(item)}><Text style={{ color: 'white', paddingLeft: entireScreenHeight / 50 }}>Delete</Text></TouchableHighlight>,
-    ];
     if (item.header) {
       if (item.description == "EXPORT"){
         return (
@@ -122,10 +118,10 @@ export default class App extends React.Component {
 
         <View style={styles.container}>
           <ImageBackground source={require('../assets/login.png')} style={styles.image}>
-            <View style={{ flex: 1, width: '90%', alignItems: 'center' }}>
+            <View style={{ flex: 2, width: '90%', alignItems: 'center' }}>
               <Image source={require('../assets/pastVol.png')} style={{
                 height: '100%',
-                width: '84%',
+                width: '90%',
                 marginTop: '10%',
                 flex: 1,
               }} resizeMode="contain"></Image>
@@ -173,7 +169,7 @@ export default class App extends React.Component {
             <View style={{ flex: 1, width: '90%', alignItems: 'center' }}>
               <Image source={require('../assets/pastVol.png')} style={{
                 height: '75%',
-                width: '75%',
+                width: '90%',
                 marginTop: '8%',
                 flex: 1,
               }} resizeMode="contain"></Image></View>
