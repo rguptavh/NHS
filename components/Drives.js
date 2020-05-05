@@ -2,7 +2,6 @@ import React from "react";
 import { FlatList, TouchableOpacity, ImageBackground, StyleSheet, Dimensions, View, Image, Alert, TouchableHighlight, Linking } from "react-native";
 import { Text, ListItem, Body} from "native-base";
 import moment from 'moment';
-import Swipeable from 'react-native-swipeable-row';
 import Spinner from 'react-native-loading-spinner-overlay';
 
 
@@ -39,127 +38,8 @@ export default class App extends React.Component {
       }
     }
   }
-  edit(item) {
-
-    var temp = this.state.data;
-    global.logs = temp;
-    this.setState({ data: temp });
-    global.olddate = String(item.date);
-    global.oldtime = String(item.time);
-    global.oldminutes = String(item.minutes);
-    global.olddescription = String(item.description).trim().replace(/\n/g, " ");
-    global.oldroad = item.road;
-    global.oldnight = item.tod;
-    global.oldweather = item.weather;
-    global.oldid = item.id;
-    this.props.navigation.navigate('Edit');
 
 
-  }
-
-  deleteNote(item) {
-    Alert.alert(
-      "Delete Drive",
-      "Are you sure you want to delete your drive?",
-      [
-        {
-          text: "No"
-        },
-        {
-          text: "Yes", onPress: () => {
-            var temp = this.state.data;
-            for (i = 0; i < temp.length; i++) {
-              if (temp[i].id == item.id) {
-                temp.splice(i, 1);
-                break;
-              }
-            }
-            let result = [];
-            const map = new Map();
-            for (const item of temp) {
-              if (!map.has(item.date) && !item.header) {
-                map.set(item.date, true);    // set any value to Map
-                result.push(item.date);
-              }
-            }
-            for (i = 0; i < temp.length; i++) {
-              if (temp[i].header && !result.includes(temp[i].date) && temp[i].description != 'EXPORT') {
-                temp.splice(i, 1);
-                break;
-              }
-            }
-            global.logs = temp;
-            this.setState({ data: temp });
-            var date = String(item.date);
-            var time = String(item.time);
-            var minutes = parseInt(String(item.minutes));
-            var description = String(item.description).trim().replace(/\n/g, " ");
-            var road = item.road;
-            var night = item.tod;
-            var weather = item.weather;
-            var temp = global.totalhrs + global.totalmins / 60;
-            temp -= minutes / 60;
-            global.totalhrs = Math.floor(parseFloat(temp));
-            global.totalmins = Math.round((parseFloat(temp) - global.totalhrs) * 60);
-
-            if (night == 'Night') {
-              temp = global.nighthrs + global.nightmins / 60;
-              temp -= minutes / 60
-              global.nighthrs = Math.floor(parseFloat(temp));
-              global.nightmins = Math.round((parseFloat(temp) - global.nighthrs) * 60);
-            }
-            if (road == 'Local')
-              global.local -= (minutes / 60);
-            else if (road == 'Highway')
-              global.highway -= (minutes / 60);
-            else if (road == 'Tollway')
-              global.tollway -= (minutes / 60);
-            else if (road == 'Urban')
-              global.urban -= (minutes / 60);
-            else if (road == 'Rural')
-              global.rural -= (minutes / 60);
-            else
-              global.plot -= (minutes / 60);
-
-            if (weather == 'Sunny')
-              global.sunny -= (minutes / 60);
-            else if (weather == 'Rain')
-              global.rain -= (minutes / 60);
-            else if (weather == 'Snow')
-              global.snow -= (minutes / 60);
-            else if (weather == 'Fog')
-              global.fog -= (minutes / 60);
-            else if (weather == 'Hail')
-              global.hail -= (minutes / 60);
-            else if (weather == 'Sleet')
-              global.sleet -= (minutes / 60);
-            else
-              global.frain -= (minutes / 60);
-
-            const Http = new XMLHttpRequest();
-            const url = 'https://script.google.com/macros/s/AKfycbz21dke8ZWXExmF9VTkN0_3ITaceg-3Yg-i17lO31wtCC_0n00/exec';
-            var data = "?username=" + global.uname + "&date=" + date + "&time=" + time + "&description=" + description + "&tod=" + night + "&time=" + time + "&minutes=" + minutes + "&road=" + road + "&weather=" + weather + "&action=delete";
-          //  // console.log(data);
-            Http.open("GET", String(url + data));
-            Http.send();
-            var ok;
-            Http.onreadystatechange = (e) => {
-              ok = Http.responseText;
-              if (Http.readyState == 4) {
-                if (String(ok) == "Success") {
-
-                }
-                else {
-                  alert("Failed to delete on server, please try again later");
-                }
-              }
-            }
-          }
-        }
-      ],
-      { cancelable: false }
-    );
-  }
 
   _renderItem = ({ item }) => {
     const rightButtons = [

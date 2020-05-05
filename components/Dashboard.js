@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { View, StyleSheet, Image, ImageBackground, TouchableOpacity, Alert, Dimensions, AsyncStorage, FlatList, TouchableHighlight, Linking } from 'react-native';
 import moment from 'moment';
-import { Text, ListItem,Body} from "native-base";
+import { Text, ListItem,Body, Badge, Icon} from "native-base";
 import * as WebBrowser from 'expo-web-browser';
 import Spinner from 'react-native-loading-spinner-overlay';
 
@@ -115,14 +115,18 @@ export default class Login extends React.Component {
       }
       return (
       
-          <ListItem style={{ marginLeft: 0, backgroundColor: 'transparent' }} >
+          <ListItem style={{ marginLeft: 0, backgroundColor: 'transparent' }} iconRight iconStyle={{ color: "green" , marginLeft:'5%'}} >
+
             <TouchableOpacity onPress={() => this.open(item)}>
+
             <Body>
+
             <Text style={{ flex: 1, fontFamily: 'WSB', color: 'white' }}>{item.name}</Text>
                 <Text style={{ flex: 1, fontFamily: 'WSR', color: 'white' }}>{item.address}</Text>
                 <Text style={{ flex: 1, fontFamily: 'WSR', color: 'white' }}>{item.contact}</Text>
             </Body>
             </TouchableOpacity>
+            
           </ListItem>
       );
     };
@@ -146,7 +150,7 @@ export default class Login extends React.Component {
                 <Text style={{ flex: 1, fontFamily: 'WSR', color: 'white' }}>{item.start} to {item.end} on {item.date}</Text>
               </Body>
               </TouchableOpacity>
-
+              {item.signed == 'true' ? <Icon name='ios-checkmark' style = {{marginLeft:'20%', color:'green'}}></Icon> : null}
             </ListItem>
         );
       };
