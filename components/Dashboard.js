@@ -182,7 +182,7 @@ export default class Login extends React.Component {
         <View style={styles.container}>
           <Spinner
             visible={this.state.spinner}
-            textContent={'Sigining Up...'}
+            textContent={'Signing Up...'}
             textStyle={styles.spinnerTextStyle}
           />
           <ImageBackground source={require('../assets/login.png')} style={styles.image}>
