@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { View, StyleSheet, Image, ImageBackground, TouchableOpacity, Alert, Dimensions, AsyncStorage, FlatList, TouchableHighlight, Linking } from 'react-native';
-import moment from 'moment';
+import { View, StyleSheet, Image, ImageBackground, TouchableOpacity, Alert, Dimensions, FlatList} from 'react-native';
 import { Text, ListItem,Body, Badge, Icon} from "native-base";
 import * as WebBrowser from 'expo-web-browser';
 import Spinner from 'react-native-loading-spinner-overlay';
@@ -13,7 +12,6 @@ const entireScreenHeight = Dimensions.get('window').height;
 const rem = entireScreenHeight / 380;
 const entireScreenWidth = Dimensions.get('window').width;
 const wid = entireScreenWidth / 380;
-let first = true;
 
 export default class Login extends React.Component {
   state = {
@@ -45,7 +43,12 @@ export default class Login extends React.Component {
     }
     else{
       if(item.type=='Specific'){
+
         if (item.signed == 'false'){
+          if(item.slots == "0"){
+            alert("Sorry, all the spots for " + item.name + " are taken");
+          }
+          else{
         Alert.alert(
           "Sign-Up",
           "Description: "+item.description+"\nAre you sure you want to sign-up for "+item.name+"?\nNOTE: You will have to email a NHS sponsor to cancel your sign-up",
@@ -84,11 +87,27 @@ export default class Login extends React.Component {
                     }
                     else if(String(ok) == "false"){
                       this.setState({spinner: false})
-                      setTimeout(() => {  alert("You are already signed up for "+item.name);}, 100);
+                      setTimeout(() => {  alert("Sorry, this event doesn't exist anymore");}, 100);
+                      var temp = this.state.specific;
+                      for (var x=0, l = temp.length; x<l;x++){
+                        if (item.name == temp[x].name){
+                          temp.splice(x,1);
+                          break;
+                        }
+                      }
+                      this.setState({specific: temp});
                     }
                     else if(String(ok) == "nospots"){
                       this.setState({spinner: false})
                       setTimeout(() => {  alert("Sorry, all the spots for " + item.name + " are taken");}, 100);
+                      var temp = this.state.specific;
+                      for (var x=0, l = temp.length; x<l;x++){
+                        if (item.name == temp[x].name){
+                          temp[x]["slots"] = "0";
+                          break;
+                        }
+                      }
+                      this.setState({specific: temp});
                     }
                     else{
                       this.setState({spinner: false})
@@ -104,6 +123,7 @@ export default class Login extends React.Component {
             { cancelable: false }
           );
           }
+        }
         else{
           alert("You are already signed up for "+item.name+"!");
         }
@@ -117,12 +137,6 @@ export default class Login extends React.Component {
   
   static navigationOptions = { headerMode: 'none', gestureEnabled: false };
   _renderItem = ({ item }) => {
-
-      var f = false
-      if (first) {
-        f = true;
-        first = false;
-      }
       return (
       
           <ListItem style={{ marginLeft: 0, backgroundColor: 'transparent' }} iconRight iconStyle={{ color: "green" , marginLeft:'5%'}} >
@@ -141,13 +155,6 @@ export default class Login extends React.Component {
       );
     };
     _renderItem2 = ({ item }) => {
-
-  
-        var f = false
-        if (first) {
-          f = true;
-          first = false;
-        }
         return (
       
             <ListItem style={{ marginLeft: 0, backgroundColor: 'transparent' }}>
@@ -166,17 +173,8 @@ export default class Login extends React.Component {
         );
       };
   render() {
-
-    var ree;
     const onPress = () => {
       this.props.navigation.navigate('Main')
-    }
-
-    if (entireScreenWidth >= 0.92 * entireScreenHeight * 4 / 9 * 1524 / 1200) {
-      ree = rem;
-    }
-    else {
-      ree = 1.75 * wid;
     }
 
       return (

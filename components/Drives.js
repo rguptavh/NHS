@@ -1,5 +1,5 @@
 import React from "react";
-import { FlatList, TouchableOpacity, ImageBackground, StyleSheet, Dimensions, View, Image, Alert, TouchableHighlight, Linking } from "react-native";
+import { FlatList, TouchableOpacity, ImageBackground, StyleSheet, Dimensions, View, Image} from "react-native";
 import { Text, ListItem, Body} from "native-base";
 import moment from 'moment';
 import Spinner from 'react-native-loading-spinner-overlay';
@@ -9,7 +9,6 @@ const entireScreenHeight = Dimensions.get('window').height;
 const rem = entireScreenHeight / 380;
 const entireScreenWidth = Dimensions.get('window').width;
 const wid = entireScreenWidth / 380;
-let first = true;
 
 export default class App extends React.Component {
   constructor() {
@@ -43,22 +42,6 @@ export default class App extends React.Component {
 
   _renderItem = ({ item }) => {
     if (item.header) {
-      if (item.description == "EXPORT"){
-        return (
-          <View style={{backgroundColor: '#acb5b5', width: '100%', flex: 1}}>
-          
-        <ListItem>
-        <TouchableOpacity style = {{flex:1, width:'100%'}} onPress={() => this.export()}>
-          <Body style={{ marginRight: 0, alignItems: 'center' }}>
-            <Text style={{ fontWeight: "bold" }}>EXPORT YOUR DRIVES</Text>
-          </Body>
-          </TouchableOpacity>
-        </ListItem>
-       
-        </View>
-        );
-      }
-      else{
       return (
 
         <ListItem itemDivider>
@@ -72,14 +55,9 @@ export default class App extends React.Component {
 
 
       );
-      }
     }
     else {
-      var f = false
-      if (first) {
-        f = true;
-        first = false;
-      }
+
       return (
           <ListItem style={{ marginLeft: 0, backgroundColor: 'transparent' }}>
             <Body>
@@ -102,17 +80,7 @@ export default class App extends React.Component {
 
     
   //  // console.log(JSON.stringify(global.logs))
-    const entireScreenHeight = Dimensions.get('window').height;
-    const rem = entireScreenHeight / 380;
-    const entireScreenWidth = Dimensions.get('window').width;
-    const wid = entireScreenWidth / 380;
-    var ree;
-    if (entireScreenWidth >= 0.92 * entireScreenHeight * 4 / 9 * 1524 / 1200) {
-      ree = rem;
-    }
-    else {
-      ree = 1.75 * wid;
-    }
+
     if (global.logs.length == 0) {
       return (
 
