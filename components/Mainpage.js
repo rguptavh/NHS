@@ -1,14 +1,16 @@
 import * as React from 'react';
-import { Text, View, StyleSheet, Image, ImageBackground, TouchableOpacity, Dimensions, AsyncStorage } from 'react-native';
+import { Text, View, StyleSheet, Image, ImageBackground, TouchableOpacity, Dimensions, AsyncStorage, Alert } from 'react-native';
 import * as WebBrowser from 'expo-web-browser';
-import { activateKeepAwake, deactivateKeepAwake } from 'expo-keep-awake';
 import * as Progress from 'react-native-progress';
+import { NavigationActions, StackActions } from 'react-navigation'
 
 
 const entireScreenHeight = Dimensions.get('window').height;
 const rem = entireScreenHeight / 380;
 const entireScreenWidth = Dimensions.get('window').width;
 const wid = entireScreenWidth / 380;
+
+
 export default class Mainpage extends React.Component {
   constructor(props) {
     super(props);
@@ -16,44 +18,11 @@ export default class Mainpage extends React.Component {
     // Ignore dynamic type scaling on iOS
     Text.defaultProps.allowFontScaling = false; 
     this.state = {
-      startDisable: false,
-      loading: global.logging,
       progress1: 0,
     }
   }
 
-  componentWillUnmount() {
-    deactivateKeepAwake();
-    clearInterval(this.state.timer);
-  }
 
-  componentDidMount() {
-    try {
-     // AsyncStorage.removeItem('username');  // Clear username for testing
-      // console.log(this.state.loading)
-      if (global.logs == null) {
-        let times = setInterval(() => {
-         // // console.log(global.logging)
-          if (global.logs != null) {
-            this.setState({ loading: false });
-            this.setState({ progress1: (global.hours * 60 + global.minutes) / 2400 });
-            clearInterval(this.state.times);
-          }
-
-        }, 100);
-        this.setState({ times });
-      }
-      else {
-        setTimeout(() => {
-          this.setState({ progress1: (global.hours * 60 + global.minutes) / 3000 });
-        }, 500);
-      }
-      return true;
-    }
-    catch (exception) {
-      return false;
-    }
-  }
 
 
   logDrive = () => {
@@ -61,29 +30,42 @@ export default class Mainpage extends React.Component {
 
   }
   pastDrives = () => {
-    if (this.state.loading) {
-      alert("Your drives are loading")
-    }
-    else {
       this.props.navigation.navigate('Drives')
-    }
 
   }
 
   dashBoard = () => {
-    if (this.state.loading) {
-      alert("Your dashboard is loading")
-    }
-    else{
     this.props.navigation.navigate('Dashboard')
-    }
   }
 
 
   static navigationOptions = { headerMode: 'none', gestureEnabled: false };
 
   render() {
-
+    const onPress2 = async () => {
+      Alert.alert(
+        "Log Out",
+        "Are you sure you want to log out?",
+        [
+          {
+            text: "No"
+          },
+          {
+            text: "Yes", onPress: async () => {
+              await AsyncStorage.removeItem('username');
+              const resetAction = StackActions.reset({
+                index: 0,
+                actions: [NavigationActions.navigate({routeName: 'Login'})],
+                key: null,
+              });
+              this.props.navigation.dispatch(resetAction);
+            }
+          }
+        ],
+        { cancelable: false }
+      );
+    
+    }
     const Handbook = () => {
       WebBrowser.openBrowserAsync('https://www.d128.org/vhhs/students/student-activities/nhs/index');
     }
@@ -92,7 +74,7 @@ export default class Mainpage extends React.Component {
         <ImageBackground source={require('../assets/login.png')} style={styles.image}>
         <View style={{ flex: 2, width: '100%', alignItems: 'center', marginTop: entireScreenHeight * 0.05, justifyContent: 'center', }}>
             <View style={styles.topcard}>
-              <TouchableOpacity style={{ flex: 1, width: '100%', alignItems: 'center' }}>
+              <TouchableOpacity style={{ flex: 1, width: '100%', alignItems: 'center' }} onPress={onPress2}>
                 <View style={{ flex: 1, justifyContent: 'center', flexDirection: 'row', width: '90%', alignItems: 'flex-end' }}>
                   <Text style={{ marginTop: entireScreenHeight * 0.96 * 16 / 63 * 0.08, alignItems: 'center', textAlign: 'center', }} numberOfLines={1}>
                     <Text style={{ fontSize: Math.min((70-10*(Math.floor(Math.log10(global.minutes <= 0 ? 1 : global.minutes)) + Math.floor(Math.log10(global.hours <= 0 ? 1 : global.hours)))) * wid, 32 * rem), fontFamily: 'WSR', color: 'white' }} >{global.hours}</Text>
