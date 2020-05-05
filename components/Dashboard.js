@@ -188,13 +188,7 @@ export default class Login extends React.Component {
             textStyle={styles.spinnerTextStyle}
           />
           <ImageBackground source={require('../assets/login.png')} style={styles.image}>
-            <View style={{ flex: 1, width: '90%', alignItems: 'center' }}>
-              <Image source={require('../assets/pastdrives.png')} style={{
-                height: '100%',
-                width: '100%',
-                marginTop: '10%',
-                flex: 1,
-              }} resizeMode="contain"></Image></View>
+            <View style={{ flex: 0.4, width: '90%', alignItems: 'center' }}></View>
             <View style={{ width: '100%', flex: 6 }}>
               <View style = {{width:'100%', flex:1,alignItems:'center',justifyContent:'center'}}>
               <Text style={{ fontSize: Math.min(25 * wid, 16 * rem), fontFamily: 'WSBB', color: 'white' }}>Ongoing Opportunities</Text>
