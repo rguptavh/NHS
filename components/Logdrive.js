@@ -57,7 +57,7 @@ export default class Login extends React.Component {
         alert("Please log in again");
       }
 
-      else if (date != '' && event != '' && !isNaN(minutes)) {
+      else if (date != '' && event != '' && event != 'Select an event...' && !isNaN(minutes)) {
 
         if (minutes == '0') {
           alert("Can't log 0 minutes")
