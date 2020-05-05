@@ -114,7 +114,57 @@ export default class Login extends React.Component {
       WebBrowser.openBrowserAsync(item.description);
     }
     else{
-      alert(item.description);
+      if(item.type=='Specific'){
+        Alert.alert(
+          "Sign-Up",
+          "Description: "+item.description+"\nAre you sure you want to sign-up for "+item.name+"?",
+          [
+            {
+              text: "No"
+            },
+            {
+              text: "Yes", onPress: () => {
+ 
+
+    
+                const Http = new XMLHttpRequest();
+                const url = 'https://script.google.com/macros/s/AKfycbxMNgxSn85f9bfVMc5Ow0sG1s0tBf4d2HwAKzASfCSuu9mePQYm/exec';
+                var data = "?username=" + global.uname + "&event="+item.name+"&action=signup";
+              //  // console.log(data);
+                Http.open("GET", String(url + data));
+                Http.send();
+                var ok;
+                Http.onreadystatechange = (e) => {
+                  ok = Http.responseText;
+                  console.log(ok);
+                  if (Http.readyState == 4) {
+                    if (String(ok) == "true") {
+                      alert("You have been signed up for "+item.name);
+                    }
+                    else if(String(ok) == "false"){
+                      alert("You are already signed up for "+item.name);
+                    }
+                    else{
+                      alert("Failed to sign-up on server. Please try again.");
+                    }
+                  }
+                }
+              }
+            }
+          ],
+          { cancelable: false }
+        );
+
+
+
+      }
+ 
+
+      
+      else{
+        alert(item.type);
+
+      }
     }
   }
   
@@ -150,12 +200,16 @@ export default class Login extends React.Component {
         return (
       
             <ListItem style={{ marginLeft: 0, backgroundColor: 'transparent' }}>
+            <TouchableOpacity onPress={() => this.open(item)}>
+
               <Body>
               <Text style={{ flex: 1, fontFamily: 'WSB', color: 'white' }}>{item.name}</Text>
                 <Text style={{ flex: 1, fontFamily: 'WSR', color: 'white' }}>{item.address}</Text>
                 <Text style={{ flex: 1, fontFamily: 'WSR', color: 'white' }}>{item.contact}</Text>
                 <Text style={{ flex: 1, fontFamily: 'WSR', color: 'white' }}>{item.start} to {item.end} on {item.date}</Text>
               </Body>
+              </TouchableOpacity>
+
             </ListItem>
         );
       };
