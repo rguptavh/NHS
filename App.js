@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, Vibration, Platform, StyleSheet,AsyncStorage, Image, } from 'react-native';
+import { Text, View, Vibration, Platform, StyleSheet,AsyncStorage, Image, Alert } from 'react-native';
 import { Notifications } from 'expo';
 import * as Permissions from 'expo-permissions';
 import * as Font from 'expo-font';
@@ -18,10 +18,10 @@ import moment from 'moment';
 
 
 //import moment from 'moment';
+global.token = "None"
 let logged = false;
 export default class AppContainer extends React.Component {
   state = {
-    expoPushToken: '',
     notification: {},
     assetsLoaded: false,
     isAppReady: false,
@@ -39,17 +39,22 @@ export default class AppContainer extends React.Component {
       const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
       let finalStatus = existingStatus;
       if (existingStatus !== 'granted') {
-        alert('This app uses notifications');
+        asked = await AsyncStorage.getItem('asked')
+        console.log(asked)
+        if (asked == null || asked == 'undefined') {
+          AsyncStorage.setItem('asked', "true");
+          Alert.alert('Please Enable Notifications','This app uses notifications to notify you when events are added and when an event has limited slots are left.');
+        }
+
         const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+
         finalStatus = status;
         console.log(status)
       }
       if (finalStatus !== 'granted') {
         return;
       }
-      token = await Notifications.getExpoPushTokenAsync();
-      console.log(token);
-      this.setState({ expoPushToken: token });
+      global.token = await Notifications.getExpoPushTokenAsync();
     } else {
       alert('Must use physical device for Push Notifications');
     }
@@ -102,7 +107,7 @@ export default class AppContainer extends React.Component {
       var uname = name;
       const Http = new XMLHttpRequest();
       const url = 'https://script.google.com/macros/s/AKfycbxMNgxSn85f9bfVMc5Ow0sG1s0tBf4d2HwAKzASfCSuu9mePQYm/exec';
-      var data = "?username=" + uname + "&action=getlogs";
+      var data = "?username=" + uname + "&token=" + String(global.token) +"&action=getlogs";
       console.log(data)
       Http.open("GET", String(url + data));
       Http.send();
