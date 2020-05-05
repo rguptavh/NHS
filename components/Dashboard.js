@@ -72,6 +72,14 @@ export default class Login extends React.Component {
                     if (String(ok) == "true") {
                       this.setState({spinner: false})
                       setTimeout(() => { alert("You have been signed up for "+item.name);}, 100);
+                      var temp = this.state.specific;
+                      for (var x=0, l = temp.length; x<l;x++){
+                        if (item.name == temp[x].name){
+                          temp[x]["signed"] = "true";
+                          break;
+                        }
+                      }
+                      this.setState({specific: temp});
                     }
                     else if(String(ok) == "false"){
                       this.setState({spinner: false})
