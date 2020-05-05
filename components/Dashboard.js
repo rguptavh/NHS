@@ -45,7 +45,7 @@ export default class Login extends React.Component {
     }
     else{
       if(item.type=='Specific'){
-
+        if (item.signed == 'false'){
         Alert.alert(
           "Sign-Up",
           "Description: "+item.description+"\nAre you sure you want to sign-up for "+item.name+"?\nNOTE: You will have to email a NHS sponsor to cancel your sign-up",
@@ -88,21 +88,17 @@ export default class Login extends React.Component {
                   }
                 }
               }
+            
+            
+          }
             ],
             { cancelable: false }
           );
-        }
+          }
         else{
           alert("You are already signed up for "+item.name+"!");
         }
-
-
-
-
       }
- 
-
-      
       else{
         alert(item.description);
 
@@ -122,7 +118,7 @@ export default class Login extends React.Component {
       
           <ListItem style={{ marginLeft: 0, backgroundColor: 'transparent' }} iconRight iconStyle={{ color: "green" , marginLeft:'5%'}} >
 
-            <TouchableOpacity onPress={() => this.open(item)}>
+            <TouchableOpacity onPress={() => this.open(item)} style = {{width:'90%'}}>
 
             <Body>
 
@@ -146,7 +142,7 @@ export default class Login extends React.Component {
         return (
       
             <ListItem style={{ marginLeft: 0, backgroundColor: 'transparent' }}>
-            <TouchableOpacity onPress={() => this.open(item)}>
+            <TouchableOpacity onPress={() => this.open(item)} style = {{width:'90%'}}>
 
               <Body>
               <Text style={{ flex: 1, fontFamily: 'WSB', color: 'white' }}>{item.name}</Text>
@@ -155,7 +151,7 @@ export default class Login extends React.Component {
                 <Text style={{ flex: 1, fontFamily: 'WSR', color: 'white' }}>{item.start} to {item.end} on {item.date}</Text>
               </Body>
               </TouchableOpacity>
-              {item.signed == 'true' ? <Icon name='ios-checkmark' style = {{marginLeft:'20%', color:'green'}}></Icon> : null}
+              {item.signed == 'true' ? <Icon name='ios-checkmark' style = {{marginLeft:'5%', color:'green'}}></Icon> : null}
             </ListItem>
         );
       };
