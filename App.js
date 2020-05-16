@@ -20,6 +20,7 @@ import moment from 'moment';
 //import moment from 'moment';
 global.token = "None"
 let logged = false;
+console.disableYellowBox = true;
 export default class AppContainer extends React.Component {
   state = {
     notification: {},

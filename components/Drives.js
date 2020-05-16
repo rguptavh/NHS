@@ -86,14 +86,13 @@ export default class App extends React.Component {
 
         <View style={styles.container}>
           <ImageBackground source={require('../assets/login.png')} style={styles.image}>
-            <View style={{ flex: 2, width: '90%', alignItems: 'center' }}>
+          <View style={{ flex: 1, width: '90%', alignItems: 'center' }}>
               <Image source={require('../assets/pastVol.png')} style={{
-                height: '100%',
+                height: '75%',
                 width: '90%',
-                marginTop: '10%',
+                marginTop: '8%',
                 flex: 1,
-              }} resizeMode="contain"></Image>
-            </View>
+              }} resizeMode="contain"></Image></View>
             <View style={{ width: '100%', flex: 6, justifyContent: 'center', alignItems: 'center' }}>
               <Text style={{ fontSize: 25 * wid, color: 'white', fontFamily: 'WSB' }}>Please create your first log!</Text>
             </View>
