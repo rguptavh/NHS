@@ -348,6 +348,7 @@ const styles = StyleSheet.create({
     height: Dimensions.get('window').height,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#D3DFF6'
 
   },
   image: {
