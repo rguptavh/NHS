@@ -125,8 +125,7 @@ export default class Login extends React.Component {
       inputAndroid: {
         color: 'black',
         alignSelf: 'center',
-        fontSize: 12 * ree,
-        paddingBottom: 3 * ree,
+        fontSize: Math.min(this.state.size,rem*15),
         height: '100%',
         width: '95%',
         textAlign: 'center'
