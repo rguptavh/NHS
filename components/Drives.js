@@ -74,7 +74,7 @@ export default class App extends React.Component {
   render() {
     //// console.log(global.logs)
     const onPress = () => {
-      this.props.navigation.navigate('Main')
+      this.props.navigation.replace('Main')
     }
     
 
