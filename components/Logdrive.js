@@ -10,7 +10,7 @@ export default class Login extends React.Component {
 
   state = {
     date: moment().format("MM-DD-YYYY"),
-    minutes: "",
+    hours: "",
     event: '',
     loading: false,
     size: 50,
@@ -38,7 +38,7 @@ export default class Login extends React.Component {
     const wid = entireScreenWidth / 380;
     var ree;
     // console.log(global.uname);
-    // console.log(global.minutes);
+    // console.log(global.hours);
 
     if (entireScreenWidth >= entireScreenHeight * 3 / 4 * 1360 / 2360 * 0.9) {
       ree = rem;
@@ -50,17 +50,17 @@ export default class Login extends React.Component {
     const onPress = () => {
       var uname = String(global.username);
       var date = String(this.state.date);
-      var minutes = parseInt(String(this.state.minutes));
+      var hours = parseFloat(String(this.state.hours)); // THIS IS NOW HOURS
       var event = String(this.state.event);
       var description = String(this.state.description)
       if (uname == '') {
         alert("Please log in again");
       }
 
-      else if (date != '' && event != '' && event != 'Select an event...' && !isNaN(minutes)) {
+      else if (date != '' && event != '' && event != 'Select an event...' && !isNaN(hours)) {
 
-        if (minutes == '0') {
-          alert("Can't log 0 minutes")
+        if (hours == '0') {
+          alert("Can't log 0 hours")
         }
         else {
 
@@ -70,7 +70,7 @@ export default class Login extends React.Component {
           this.setState({ loading: true });
           const Http = new XMLHttpRequest();
           const url = 'https://script.google.com/macros/s/AKfycbxMNgxSn85f9bfVMc5Ow0sG1s0tBf4d2HwAKzASfCSuu9mePQYm/exec';
-          var data = "?username=" + global.uname + "&date=" + date + "&minutes=" + minutes + "&event=" + event + "&description=" + description + "&action=addhours";
+          var data = "?username=" + global.uname + "&date=" + date + "&minutes=" + hours + "&event=" + event + "&description=" + description + "&action=addhours";
           console.log(data);
           Http.open("GET", String(url + data));
           Http.send();
@@ -80,17 +80,17 @@ export default class Login extends React.Component {
             if (Http.readyState == 4) {
               if (ok == "true") {
                 var temp = global.hours + global.minutes / 60;
-                temp += minutes / 60;
+                temp += hours;
                 global.hours = Math.floor(parseFloat(temp));
                 global.minutes = Math.round((parseFloat(temp) - global.hours) * 60);
                 var temp = global.logs
                 for (var i = 0; i < temp.length; i++) {
-                if (temp[i].header){
-                  temp.splice(i,1);
-                  i--;
+                  if (temp[i].header) {
+                    temp.splice(i, 1);
+                    i--;
+                  }
                 }
-                }
-                temp.push({ date: date, hours: "" + (minutes / 60).toFixed(2), name: event, description: description, type: 'Log' })
+                temp.push({ date: date, hours: "" + (hours).toFixed(2), name: event, description: description, type: 'Log' })
                 temp = temp.sort((a, b) => moment(b.date, 'MM-DD-YYYY').format('X') - moment(a.date, 'MM-DD-YYYY').format('X'))
                 const map = new Map();
                 let result = [];
@@ -116,7 +116,7 @@ export default class Login extends React.Component {
                 console.log(global.hours);
                 console.log(global.minutes);
                 this.setState({ loading: false });
-                setTimeout(() => { alert("Success!"); this.props.navigation.replace('Main'); }, 100);
+                setTimeout(() => { alert("Success!"); this.props.navigation.navigate('Main'); }, 100);
 
 
               }
@@ -136,7 +136,7 @@ export default class Login extends React.Component {
       }
     }
     const onPress2 = () => {
-      global.minutes = '';
+      //global.minutes = '';
       this.props.navigation.navigate('Main')
     }
     const pickerStyle = {
@@ -250,7 +250,7 @@ export default class Login extends React.Component {
                     /></View>
                   <View style={{ width: '100%', flex: 0.4 }}></View>
                   <View style={{ flex: 1, width: '90%', justifyContent: 'center' }}>
-                    <Text style={{ fontFamily: 'Noto', color: '#3C5984', fontSize: rem * 15 }}>Minutes</Text>
+                    <Text style={{ fontFamily: 'Noto', color: '#3C5984', fontSize: rem * 15 }}>Hours</Text>
                   </View>
                   <View style={{
                     width: '90%',
@@ -262,9 +262,16 @@ export default class Login extends React.Component {
                     <TextInput
                       style={{ fontSize: Math.min(32 * wid, rem * 15), width: '100%', height: '100%' }}
                       textAlign={'center'}
-                      onChangeText={(value) => this.setState({ minutes: value })}
-                      keyboardType='number-pad'
-                      value={this.state.minutes}
+                      onChangeText={(value) => {
+                        if ((parseFloat(value) > 5 || parseFloat(value) % 0.5 != 0) && !isNaN(parseFloat(value))){
+                          this.setState({ hours: this.state.hours })
+                        }
+                        else {
+                          this.setState({ hours: value })
+                        }
+                      }}
+                      keyboardType='decimal-pad'
+                      value={this.state.hours}
                       maxLength={3}
 
                     /></View>

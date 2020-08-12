@@ -16,7 +16,7 @@ export default class Mainpage extends React.Component {
     super(props);
     Text.defaultProps = Text.defaultProps || {};
     // Ignore dynamic type scaling on iOS
-    Text.defaultProps.allowFontScaling = false; 
+    Text.defaultProps.allowFontScaling = false;
     this.state = {
       progress1: 0,
     }
@@ -24,15 +24,23 @@ export default class Mainpage extends React.Component {
 
   componentDidMount() {
     this.setState({ progress1: (global.hours * 60 + global.minutes) / 1200 });
+    this.focusListener = this.props.navigation.addListener('willFocus', () => {
+      this.setState({ refresh: true });
+      console.log('move')
+    });
   }
-
+  
+  componentWillUnmount() {
+    // Remove the event listener before removing the screen from the stack
+    this.focusListener.remove();
+  }
 
   logDrive = () => {
     this.props.navigation.navigate('Logdrive')
 
   }
   pastDrives = () => {
-      this.props.navigation.navigate('Drives')
+    this.props.navigation.navigate('Drives')
 
   }
 
@@ -44,44 +52,44 @@ export default class Mainpage extends React.Component {
   static navigationOptions = { headerMode: 'none', gestureEnabled: false };
 
   render() {
-const onPress2 = async () => {
-  Alert.alert(
-    "Log Out",
-    "Are you sure you want to log out?",
-    [
-      {
-        text: "No"
-      },
-      {
-        text: "Yes", onPress: async () => {
-          await AsyncStorage.removeItem('username');
-          const resetAction = StackActions.reset({
-            index: 0,
-            actions: [NavigationActions.navigate({routeName: 'Login'})],
-            key: null,
-          });
-          this.props.navigation.dispatch(resetAction);
-        }
-      }
-    ],
-    { cancelable: false }
-  );
+    const onPress2 = async () => {
+      Alert.alert(
+        "Log Out",
+        "Are you sure you want to log out?",
+        [
+          {
+            text: "No"
+          },
+          {
+            text: "Yes", onPress: async () => {
+              await AsyncStorage.removeItem('username');
+              const resetAction = StackActions.reset({
+                index: 0,
+                actions: [NavigationActions.navigate({ routeName: 'Login' })],
+                key: null,
+              });
+              this.props.navigation.dispatch(resetAction);
+            }
+          }
+        ],
+        { cancelable: false }
+      );
 
-}
+    }
     const Handbook = () => {
       WebBrowser.openBrowserAsync('https://www.d128.org/vhhs/students/student-activities/nhs/index');
     }
     return (
       <View style={styles.container}>
         <ImageBackground source={require('../assets/login.png')} style={styles.image}>
-        <View style={{ flex: 2, width: '100%', alignItems: 'center', marginTop: entireScreenHeight * 0.05, justifyContent: 'center', }}>
+          <View style={{ flex: 2, width: '100%', alignItems: 'center', marginTop: entireScreenHeight * 0.05, justifyContent: 'center', }}>
             <View style={styles.topcard}>
               <TouchableOpacity style={{ flex: 1, width: '100%', alignItems: 'center' }} onPress={onPress2}>
                 <View style={{ flex: 1, justifyContent: 'center', flexDirection: 'row', width: '90%', alignItems: 'flex-end' }}>
                   <Text style={{ marginTop: entireScreenHeight * 0.96 * 16 / 63 * 0.08, alignItems: 'center', textAlign: 'center', }} numberOfLines={1}>
-                    <Text style={{ fontSize: Math.min((70-10*(Math.floor(Math.log10(global.minutes <= 0 ? 1 : global.minutes)) + Math.floor(Math.log10(global.hours <= 0 ? 1 : global.hours)))) * wid, 32 * rem), fontFamily: 'WSR', color: 'white' }} >{global.hours}</Text>
+                    <Text style={{ fontSize: Math.min((70 - 10 * (Math.floor(Math.log10(global.minutes <= 0 ? 1 : global.minutes)) + Math.floor(Math.log10(global.hours <= 0 ? 1 : global.hours)))) * wid, 32 * rem), fontFamily: 'WSR', color: 'white' }} >{global.hours}</Text>
                     <Text style={{ fontSize: Math.min(25 * wid, 16 * rem), fontFamily: 'WSR', color: 'white' }}>{global.hours == 1 ? "hour " : "hours "}</Text>
-                    <Text style={{ fontSize: Math.min((70-10*(Math.floor(Math.log10(global.minutes <= 0 ? 1 : global.minutes)) + Math.floor(Math.log10(global.hours <= 0 ? 1 : global.hours)))) * wid, 32 * rem), fontFamily: 'WSR', color: 'white' }}>{global.minutes==''?'0' : global.minutes}</Text>
+                    <Text style={{ fontSize: Math.min((70 - 10 * (Math.floor(Math.log10(global.minutes <= 0 ? 1 : global.minutes)) + Math.floor(Math.log10(global.hours <= 0 ? 1 : global.hours)))) * wid, 32 * rem), fontFamily: 'WSR', color: 'white' }}>{global.minutes == '' ? '0' : global.minutes}</Text>
                     <Text style={{ fontSize: Math.min(25 * wid, 16 * rem), fontFamily: 'WSR', color: 'white' }}>{global.minutes == 1 ? "minute" : "minutes"}</Text>
                   </Text>
                 </View>

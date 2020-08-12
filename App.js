@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, Vibration, Platform, StyleSheet,AsyncStorage, Image, Alert } from 'react-native';
+import { Text, View, Vibration, Platform, StyleSheet, AsyncStorage, Image, Alert } from 'react-native';
 import { Notifications } from 'expo';
 import * as Permissions from 'expo-permissions';
 import * as Font from 'expo-font';
@@ -44,7 +44,7 @@ export default class AppContainer extends React.Component {
         console.log(asked)
         if (asked == null || asked == 'undefined') {
           AsyncStorage.setItem('asked', "true");
-          Alert.alert('Please Enable Notifications','This app uses notifications to notify you when events are added and when an event has limited slots are left.');
+          Alert.alert('Please Enable Notifications', 'This app uses notifications to notify you when events are added and when an event has limited slots are left.');
         }
 
         const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
@@ -86,14 +86,14 @@ export default class AppContainer extends React.Component {
       'WSBB': require('./assets/fonts/WorkSans-Black.ttf'),
     });
     this.cacheResourcesAsync() // ask for resources
-    .then(() => this.setState({assetsLoaded: true})) // mark resources as loaded
+      .then(() => this.setState({ assetsLoaded: true })) // mark resources as loaded
 
     global.logging = false;
     let name;
     try {
       name = await AsyncStorage.getItem('username')
-    //  // console.log(name);
-    //  // console.log(global.logged);
+      //  // console.log(name);
+      //  // console.log(global.logged);
       if (name !== null && name != 'undefined') {
         logged = true;
         global.uname = name;
@@ -108,7 +108,7 @@ export default class AppContainer extends React.Component {
       var uname = name;
       const Http = new XMLHttpRequest();
       const url = 'https://script.google.com/macros/s/AKfycbxMNgxSn85f9bfVMc5Ow0sG1s0tBf4d2HwAKzASfCSuu9mePQYm/exec';
-      var data = "?username=" + uname + "&token=" + String(global.token) +"&action=getlogs";
+      var data = "?username=" + uname + "&token=" + String(global.token) + "&action=getlogs";
       console.log(data)
       Http.open("GET", String(url + data));
       Http.send();
@@ -176,6 +176,7 @@ export default class AppContainer extends React.Component {
             for (const item of specific) {
               options.push({ label: item.name, value: item.name })
             }
+            options.push({ label: "Other", value: "Other" })
             global.options = options;
             global.ongoing = ongoing;
             global.specific = specific;
@@ -201,7 +202,7 @@ export default class AppContainer extends React.Component {
       SplashScreen.hide();
       this.setState({ isAppReady: true });
     }
- 
+
   }
 
   _handleNotification = notification => {
@@ -213,10 +214,10 @@ export default class AppContainer extends React.Component {
   render() {
     if (!this.state.assetsLoaded) {
       return null;
-  }
+    }
     if (!this.state.isAppReady) {
-        return (
-          <View style={{ flex: 1 }}>
+      return (
+        <View style={{ flex: 1 }}>
           <Image
             style={{ flex: 1, resizeMode: 'cover', width: undefined, height: undefined }}
             source={require('./assets/splash.gif')}
@@ -228,32 +229,32 @@ export default class AppContainer extends React.Component {
           />
         </View>
       );
-        }
+    }
 
-      const AppNavigator = createStackNavigator({
-        Login: {
-          screen: log
-        },
-        Main: {
-          screen: mainscr
-        },
-        Logdrive: {
-          screen: logdrive
-        },
-        Drives: {
-          screen: drives
-        },
-        Dashboard: {
-          screen: dashboard
-        },
+    const AppNavigator = createStackNavigator({
+      Login: {
+        screen: log
       },
-        {
-          initialRouteName: logged ? 'Main' : 'Login',
-          headerMode: 'none'
-        });
+      Main: {
+        screen: mainscr
+      },
+      Logdrive: {
+        screen: logdrive
+      },
+      Drives: {
+        screen: drives
+      },
+      Dashboard: {
+        screen: dashboard
+      },
+    },
+      {
+        initialRouteName: logged ? 'Main' : 'Login',
+        headerMode: 'none'
+      });
 
-      const AppContainer = createAppContainer(AppNavigator);
-      return <AppContainer />;
+    const AppContainer = createAppContainer(AppNavigator);
+    return <AppContainer />;
   }
   async cacheResourcesAsync() {
     const images = [require('./assets/splash.png')];
