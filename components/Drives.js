@@ -1,6 +1,6 @@
 import React from "react";
-import { FlatList, TouchableOpacity, ImageBackground, StyleSheet, Dimensions, View, Image} from "react-native";
-import { Text, ListItem, Body} from "native-base";
+import { FlatList, TouchableOpacity, ImageBackground, StyleSheet, Dimensions, View, Image } from "react-native";
+import { Text, ListItem, Body } from "native-base";
 import moment from 'moment';
 import Spinner from 'react-native-loading-spinner-overlay';
 
@@ -59,34 +59,34 @@ export default class App extends React.Component {
     else {
 
       return (
-          <ListItem style={{ marginLeft: 0, backgroundColor: 'transparent' }}>
-            <Body>
+        <ListItem style={{ marginLeft: 0, backgroundColor: 'transparent' }}>
+          <Body>
             <Text style={{ flex: 1, fontFamily: 'WSB', color: 'white' }}>Event Name: {item.name}</Text>
-              <Text style={{ flex: 1, fontFamily: 'WSR', color: 'white' }}>{item.hours} {item.hours == 1 ? "hour" : "hours"}</Text>
-              <Text style={{ flex: 1, fontFamily: 'WSR', color: 'white' }}>{item.description}</Text>
-              
-            </Body>
-          </ListItem>
+            <Text style={{ flex: 1, fontFamily: 'WSR', color: 'white' }}>{item.hours} {item.hours == 1 ? "hour" : "hours"}</Text>
+            <Text style={{ flex: 1, fontFamily: 'WSR', color: 'white' }}>{item.description}</Text>
+
+          </Body>
+        </ListItem>
       );
     }
   };
   static navigationOptions = { headerMode: 'none', gestureEnabled: false, };
   render() {
-    //// console.log(global.logs)
+    //console.log(global.logs)
     const onPress = () => {
-      this.props.navigation.replace('Main')
+      this.props.navigation.navigate('Main')
     }
-    
 
-    
-  //  // console.log(JSON.stringify(global.logs))
+
+
+    //console.log(JSON.stringify(global.logs))
 
     if (global.logs.length == 0) {
       return (
 
         <View style={styles.container}>
           <ImageBackground source={require('../assets/login.png')} style={styles.image}>
-          <View style={{ flex: 1, width: '90%', alignItems: 'center' }}>
+            <View style={{ flex: 1, width: '90%', alignItems: 'center' }}>
               <Image source={require('../assets/pastVol.png')} style={{
                 height: '75%',
                 width: '90%',
