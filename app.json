@@ -21,11 +21,15 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.xperience.nhs",
+      "buildNumber": "1.0.0"
     },
     "android": {
       "package": "com.xperience.nhs",
-      "versionCode": 1
+      "versionCode": 1,
+      "permissions":["com.google.android.c2dm.permission.RECEIVE","VIBRATE"],
+      "googleServicesFile": "./google-services.json"
     }
   }
 }
