@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, Vibration, Platform, StyleSheet, AsyncStorage, Image, Alert } from 'react-native';
+import { Text, View, Vibration, Platform, StyleSheet, AsyncStorage, Image, Alert, LogBox } from 'react-native';
 import { Notifications } from 'expo';
 import * as Permissions from 'expo-permissions';
 import * as Font from 'expo-font';
@@ -11,7 +11,7 @@ import mainscr from './components/Mainpage';
 import drives from './components/Drives';
 import logdrive from './components/Logdrive';
 import dashboard from './components/Dashboard';
-import { SplashScreen } from 'expo';
+import * as SplashScreen from 'expo-splash-screen';
 import { Asset } from 'expo-asset';
 import moment from 'moment';
 
@@ -20,7 +20,7 @@ import moment from 'moment';
 //import moment from 'moment';
 global.token = "None"
 let logged = false;
-console.disableYellowBox = true;
+LogBox.ignoreAllLogs(true);
 export default class AppContainer extends React.Component {
   state = {
     notification: {},
@@ -32,7 +32,7 @@ export default class AppContainer extends React.Component {
     Text.defaultProps = Text.defaultProps || {};
     // Ignore dynamic type scaling on iOS
     Text.defaultProps.allowFontScaling = false;
-    SplashScreen.preventAutoHide(); // Instruct SplashScreen not to hide yet
+    SplashScreen.preventAutoHideAsync(); // Instruct SplashScreen not to hide yet
 
   }
   registerForPushNotificationsAsync = async () => {
@@ -199,7 +199,7 @@ export default class AppContainer extends React.Component {
     else {
       global.hours = 0;
       global.minutes = 0;
-      SplashScreen.hide();
+      SplashScreen.hideAsync();
       this.setState({ isAppReady: true });
     }
 
@@ -223,7 +223,7 @@ export default class AppContainer extends React.Component {
             source={require('./assets/splash.gif')}
             onLoadEnd={() => {
               console.log('Image#onLoadEnd: hiding SplashScreen');
-              SplashScreen.hide(); // Image is fully presented, instruct SplashScreen to hide
+              SplashScreen.hideAsync(); // Image is fully presented, instruct SplashScreen to hide
             }}
             fadeDuration={0}
           />
